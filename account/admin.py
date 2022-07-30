@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib.auth.admin import UserAdmin
-from account.models import Account,Role
+from account.models import Account
 
 # Register your models here.
 admin.site.site_header = "Idarah Al-Maqari' Al-Madinah"
@@ -26,6 +26,17 @@ class AccountAdmin(UserAdmin):
     filter_horizontal = ('groups','user_permissions')
     list_filter = ('date_joined','groups','is_staff','is_superuser','gender','students_halaqa__halaqa_number')
     fieldsets = ()
+    
+    
+    def get_form(self, request, obj=None,**kwargs):
+        form = super().get_form(request, obj,**kwargs)
+        is_superuser = request.user.is_superuser
+
+        if not is_superuser:
+            form.base_fields['is_superuser'].disabled = True
+            form.base_fields["user_permissions"].disabled = True
+            form.base_fields["groups"].disabled = True
+        return form
 
     def in_halaqa(self, obj):
         return list(set([halaqa.halaqa_number for halaqa in obj.students_halaqa.all()] + [halaqa.halaqa_number for halaqa in obj.teacher_in_halaqaat.all()]))
@@ -33,7 +44,5 @@ class AccountAdmin(UserAdmin):
     def group_list(self,obj):
         return [group.name for group in obj.groups.all()]
 
-
-admin.site.register(Role)
 admin.site.register(Account, AccountAdmin)
 

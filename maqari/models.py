@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.db import models
 from django.forms import CharField, DateTimeField
 from account.models import Account
@@ -11,6 +10,12 @@ class HalaqaType(models.Model):
 
     def __str__(self):
         return self.type_name
+
+    def serialize(self):
+        return{
+            'type_name' : self.type_name,
+            'type_desc' : self.type_desc,
+        }
 
 class Halaqa(models.Model):
 
@@ -26,10 +31,11 @@ class Halaqa(models.Model):
     students = models.ManyToManyField(Account,blank=True,related_name="students_halaqa")
     supervisor = models.ForeignKey(Account, null = True, on_delete=models.SET_NULL, related_name="supervised_halaqaat")
     halaqa_type = models.ForeignKey(HalaqaType,null=True,on_delete=models.SET_NULL,related_name="halaqaat_of_type")
+    halaqa_image_url = models.URLField(default='https://live.staticflickr.com/2139/2435364735_dc51a11e83.jpg')
 
     def serialize(self):
         if self.halaqa_type:
-            type = self.halaqa_type
+            type = self.halaqa_type.serialize()
         else:
             type = None
         return{
@@ -42,6 +48,6 @@ class Halaqa(models.Model):
             'supervisor_id' : self.supervisor.id,
             'supervisor_name' : f"{self.supervisor.username} {self.supervisor.last_name}",
             'halaqa_type' : type,
+            'halaqa_image_url' : self.halaqa_image_url,
         }
-
 

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 from account.views import (registration_view, logout_view, login_view, confirm)
-from maqari.views import (index, render_available_classes,show_my_classes)
+from maqari.views import (index, show_available_classes,show_my_classes,render_available_classes)
 from django_email_verification import urls as email_urls
 
 from django.contrib.auth import views as auth_views
@@ -25,10 +25,12 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", index,name='index'),
-    path("available_classes/<int:page_no>",render_available_classes,name="render_available_classes"),
+    
+    
+    path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
+    path("available_classes",render_available_classes,name="render_available_classes"),
     path("my_classes",show_my_classes,name="show_my_classes"),
     
-
 
     path("register/",registration_view,name="register"),
     path("logout/",logout_view,name="logout"),

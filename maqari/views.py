@@ -23,11 +23,13 @@ def show_my_classes(request):
         'data' : serialized_data
     })
 
+def render_available_classes(request):
+    return render(request,"maqari/available_classes.html")
 
-def render_available_classes(request,page_no):
+def show_available_classes(request,page_no):
     user = request.user
     if user.is_authenticated:
-        halaqaat = Paginator(Halaqa.objects.filter(gender = user.gender).order_by("halaqa_number").all(),10)
+        halaqaat = Paginator(Halaqa.objects.filter(gender = user.gender).order_by("halaqa_number").all(),15)
     else:
         halaqaat = Paginator(Halaqa.objects.all().order_by("halaqa_number").all(),10)
 
@@ -42,9 +44,10 @@ def render_available_classes(request,page_no):
                 halaqa["is_enrolled"] = False
         else:
             halaqa["is_enrolled"] = False
-    return render(request,"maqari/available_classes.html", {
-        'data':serialized_data
-    })
+    #return render(request,"maqari/available_classes.html", {
+        #'data':serialized_data
+    #})
+    return JsonResponse(serialized_data,safe=False)
 
 def is_enrolled(user, halaqa_id):
     try:

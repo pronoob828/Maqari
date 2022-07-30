@@ -5,12 +5,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from maqari.models import *
 
 # Create your models here.
-class Role(models.Model):
-    role_name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.role_name
-
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -76,6 +70,10 @@ class Account(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return f"{self.username} {self.last_name}"
+    
+    def get_full_name(self):
+        full_name = "%s %s" % (self.username, self.last_name)
+        return full_name.strip()
 
     def serialize(self):
         
