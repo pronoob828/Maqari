@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+{% load countries %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block body %}
+
+
+ 
+    <form class="form-register px-5" action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+                <div class="text-center">
+        <h2 class="h2 m-3">Register</h2>
+
+        <input class="form-control m-2" autofocus required maxlength="25" type="text" name="username" placeholder="First Name">
+        <input class="form-control m-2" required maxlength="25" type="text" name="last_name" placeholder="Last Name">
+        <input class="form-control m-2" required maxlength="60" type="email" name="email" placeholder="Valid Email Address">
+        <small class="text-center text-danger">We will send a verification link to this email.</small>
+        <input class="form-control m-2" required maxlength="20" type="tel" name="phone_num" placeholder="Valid Phone Number">
+
+        <select class="form-select m-2" required name="current_residence">
+        {% get_countries as countries %}
+            <option selected>Select Country of Residence</option>
+        {% for country in countries %}
+            <option value="{{ country.code }}">{{ country.name }}</option>
+        {% endfor %}
+        </select>
+
+        <select class="form-select m-2" required name="nationality">
+        {% get_countries as countries %}
+            <option disabled selected>Select Nationality</option>
+        {% for country in countries %}
+            <option value="{{ country.code }}">{{ country.name }}</option>
+        {% endfor %}
+        </select>
+
+        <h5>Gender:- </h5>
+        <input class="mx-4" type="radio" name="gender" value="Male">Male
+        <input class="mx-4" type="radio" name="gender" value="Female">Female
+
+        <input class="form-control m-2" required  type="password" name="password1" placeholder="Enter password">
+        <input class="form-control m-2" required type="password" name="password2" placeholder="Confirm password">
+        </div>
+
+        <div class="text-center my-2">
+            {% for field in registration_form %}
+            {% if field.errors %}
+            <hr>
+            {% endif %}
+            {% for error in field.errors%}
+            <p class="text-danger">{{error}}</p>
+            {% endfor %}
+            {% endfor %}
+        </div>
+
+        <small class="text-center">
+            <center>Be sure to follow the given instructions</center>
+            <ul>
+                <li>
+                    Your password can't be too similar to your other personal information.
+                </li>
+                <li>
+                    Your password must contain at least 8 characters.
+                </li>
+                <li>
+                    Your password can't be a commonly used password.
+                </li>
+                <li>
+                    Your password can't be entirely numeric.
+                </li>
+            </ul>
+        </small>
+
+        <div class="text-center my-3">
+            <button type="submit" class="btn btn-primary my-2">Register</button>
+        </div>
+
+        <h6 class="text-center">Already have an account? <a href="{% url 'login' %}">Log In</a></h6>
+        <h6 class="text-center">Registered but not Verified? <a href="{% url 'resend_email'%}">Click here</a></h6>
+    </form>
+
+
+{% endblock %}

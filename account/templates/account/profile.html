@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Profile : {{user.username}}
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid m   -3 text-center">
+        <img src="{{user.profile_image}}" alt="Profile Image" class="rounded-circle border" width="200">
+    <h1 class="text-center"><i class="fa-solid fa-user"></i> {{user.username}} {{user.last_name}} </h1>
+</div>
+<div class="container">
+    <table class="table table-condensed table-striped text-center m-0">
+        <tr>
+            <td>First Name</td>
+            <td>{{user.username}}</td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td>{{user.last_name}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{user.email}}</td>
+        </tr>
+        <tr>
+            <td>Date Joined</td>
+            <td>{{user.date_joined}} - UTC</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>{{user.gender}}</td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td>
+                {% for group_name in user.groups %}
+                {{group_name}}<br>
+                {% empty %}
+                None
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Phone Number</td>
+            <td>{{user.phone_num}}</td>
+        </tr>
+        <tr>
+            <td>Current Residence</td>
+            <td>{{user.current_residence.name}}</td>
+        </tr>
+        <tr>
+            <td>Nationality</td>
+            <td>{{user.nationality.name}}</td>
+        </tr>
+        {% if "Teacher" in user.groups %}
+        <tr>
+            <td>Years of experience</td>
+            <td>{{user.years_of_experience}}</td>
+        </tr>
+        <tr>
+            <td>Qualifications</td>
+            <td>{{user.qualifications}}</td>
+        </tr>
+        {% endif %}
+    </table>
+
+</div>
+{% endblock %}
