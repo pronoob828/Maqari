@@ -95,12 +95,30 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
    #     'NAME': BASE_DIR / 'db.sqlite3',
     #}
 #}
-DATABASES = {
+Database_no = 2;
+
+if Database_no == 1:
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+
+if Database_no == 2:
+    DATABASES = {  
+        'default': {  
+            'ENGINE': 'django.db.backends.mysql',  
+            'NAME': 'project4',  
+            'USER': os.environ.get("MYSQL_USER_PROJECT4"),  
+            'PASSWORD': os.environ.get("MYSQL_PASS"),  
+            'HOST': '127.0.0.1',  
+            'PORT': '3306',  
+            'OPTIONS': {  
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+            }  
+        }  
+    } 
 
 
 # Password validation
