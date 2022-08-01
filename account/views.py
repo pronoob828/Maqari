@@ -123,9 +123,9 @@ def show_profile(request,user_id):
     #try:
     requested_user = get_user_model().objects.get(id = user_id)
     if current_user.is_authenticated and current_user.is_active:
-        if current_user == requested_user or current_user.is_staff or (requested_user.role_of_account not in ["Student",None]):
+        if current_user == requested_user or current_user.is_staff or ("Student" not in requested_user.groups.all() and requested_user.groups.all() != None):
             return render(request, 'account/profile.html',{
-                "user" : requested_user.serialize(),
+                "requested_user" : requested_user.serialize(),
             })
         else:
             return HttpResponse("You are not autherized to view this page",status=403)

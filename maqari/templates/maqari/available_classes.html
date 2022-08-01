@@ -21,33 +21,16 @@ Available Classes
     </div>
     
     <div class="m-3">
-            <div id="halaqaat_container" class="row row-cols-1 row-cols-md-3 g-4">
-<!--                 {% for halaqa in data %}
-                <div class="col">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <img src="https://live.staticflickr.com/2139/2435364735_dc51a11e83.jpg" class="card-img"
-                                alt="halaqa image">
-                            <h5 class="card-title">{{halaqa.halaqa_number}} - {{halaqa.halaqa_type}}</h5>
-                            <p class="card-text">Teacher - <a
-                                    href="{% url 'show_profile' halaqa.teacher_id %}">{{halaqa.teacher_name}}</a></p>
-                            <p class="card-text">Gender - {{halaqa.gender}}.</p>
-                            <p><small>Timings - {{halaqa.timings}}</small></p>
-                            <div class="card-footer">
-                                {% if halaqa.is_enrolled %}
-                                <button class="btn btn-success disabled">Already enrolled</button>
-                                {% else %}
-                                <button class="btn btn-primary">Enroll</button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %} -->
+            <div id="halaqaat_container" class="row row-cols-1 row-cols-md-3 g-2">
             </div>
         </div>
-        <div>
-            
+        <div id="paginator" class="text-center">
+            <div class="d-inline-block">
+                <ul class="pagination">
+                    <li id="prev_page" class="page-item"><span class="clickable page-link" href="#">Prev Page</span></li>
+                    <li id="next_page" class="page-item"><span class="clickable page-link" href="#">Next Page</span></li>
+                </ul>
+            </div>
         </div>
     </div>
 

@@ -11,3 +11,9 @@
      padding: 15px;
      margin: auto;
  }
+
+ .styled_card_image {
+     width: 100% !important;
+     max-height: 250px !important;
+     object-fit: cover
+ }

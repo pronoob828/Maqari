@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 from account.views import (registration_view, logout_view, login_view, confirm)
-from maqari.views import (index, show_available_classes,show_my_classes,render_available_classes)
+from maqari.views import (index, show_available_classes,show_my_classes,render_available_classes,get_page_count)
 from django_email_verification import urls as email_urls
 
 from django.contrib.auth import views as auth_views
@@ -29,6 +29,7 @@ urlpatterns = [
     
     path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
     path("available_classes",render_available_classes,name="render_available_classes"),
+    path("get_page_count",get_page_count,name="get_page_count"),
     path("my_classes",show_my_classes,name="show_my_classes"),
     
 

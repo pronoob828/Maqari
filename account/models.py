@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
-from maqari.models import *
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -67,9 +66,12 @@ class Account(AbstractBaseUser,PermissionsMixin):
     ]
 
     objects = MyAccountManager()
+    
+    class Meta:
+        unique_together = ('username','last_name','email')
 
     def __str__(self):
-        return f"{self.username} {self.last_name}"
+        return f"{self.username} {self.last_name} {self.email}"
     
     def get_full_name(self):
         full_name = "%s %s" % (self.username, self.last_name)
@@ -88,12 +90,14 @@ class Account(AbstractBaseUser,PermissionsMixin):
             'username' : self.username,
             'last_name' : self.last_name,
             'gender' : self.gender,
-            'phone_num' : self.phone_num,
-            'current_residence' : self.current_residence,
-            'nationality' : self.nationality,
+            'phone_num' : str(self.phone_num),
+            'current_residence' : self.current_residence.name,
+            'nationality' : self.nationality.name,
             'date_joined' : self.date_joined,
             'years_of_experience' : exp,
             'qualifications' : self.qualifications,
             'profile_image' : self.profile_image,
             'groups' : [group.name for group in self.groups.all()]
         }
+
+

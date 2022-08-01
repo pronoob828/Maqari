@@ -2,41 +2,41 @@
 {% load static %}
 
 {% block title %}
-Profile : {{user.username}}
+Profile : {{requested_user.username}}
 {% endblock %}
 
 
 {% block body %}
 <div class="container-fluid m   -3 text-center">
-        <img src="{{user.profile_image}}" alt="Profile Image" class="rounded-circle border" width="200">
-    <h1 class="text-center"><i class="fa-solid fa-user"></i> {{user.username}} {{user.last_name}} </h1>
+        <img src="{{requested_user.profile_image}}" alt="Profile Image" class="rounded-circle border" width="200">
+    <h1 class="text-center"><i class="fa-solid fa-user"></i> {{requested_user.username}} {{requested_user.last_name}} </h1>
 </div>
 <div class="container">
     <table class="table table-condensed table-striped text-center m-0">
         <tr>
             <td>First Name</td>
-            <td>{{user.username}}</td>
+            <td>{{requested_user.username}}</td>
         </tr>
         <tr>
             <td>Last Name</td>
-            <td>{{user.last_name}}</td>
+            <td>{{requested_user.last_name}}</td>
         </tr>
         <tr>
             <td>Email</td>
-            <td>{{user.email}}</td>
+            <td>{{requested_user.email}}</td>
         </tr>
         <tr>
             <td>Date Joined</td>
-            <td>{{user.date_joined}} - UTC</td>
+            <td>{{requested_user.date_joined}} - UTC</td>
         </tr>
         <tr>
             <td>Gender</td>
-            <td>{{user.gender}}</td>
+            <td>{{requested_user.gender}}</td>
         </tr>
         <tr>
             <td>Role</td>
             <td>
-                {% for group_name in user.groups %}
+                {% for group_name in requested_user.groups %}
                 {{group_name}}<br>
                 {% empty %}
                 None
@@ -45,24 +45,26 @@ Profile : {{user.username}}
         </tr>
         <tr>
             <td>Phone Number</td>
-            <td>{{user.phone_num}}</td>
+            <td>{{requested_user.phone_num}}</td>
         </tr>
         <tr>
             <td>Current Residence</td>
-            <td>{{user.current_residence.name}}</td>
+            <td>{{requested_user.current_residence}}</td>
         </tr>
         <tr>
             <td>Nationality</td>
-            <td>{{user.nationality.name}}</td>
+            <td>{{requested_user.nationality}}</td>
         </tr>
-        {% if "Teacher" in user.groups %}
+        {% if "Teacher" in requested_user.groups %}
+        {% if requested_user.years_of_experience and requested_user.years_of_experience > 0 %}
         <tr>
             <td>Years of experience</td>
-            <td>{{user.years_of_experience}}</td>
+            <td>{{requested_user.years_of_experience}}</td>
         </tr>
+        {% endif %}
         <tr>
             <td>Qualifications</td>
-            <td>{{user.qualifications}}</td>
+            <td>{{requested_user.qualifications}}</td>
         </tr>
         {% endif %}
     </table>

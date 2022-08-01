@@ -18,7 +18,11 @@ def index(request):
 def show_my_classes(request):
     user = request.user
     enrolled_halaqaat = Halaqa.objects.filter(students = user)
+    teaching_halaqaat = Halaqa.objects.filter(teacher = user)
     serialized_data = [halaqa.serialize() for halaqa in enrolled_halaqaat]
+    serialized_data += [halaqa.serialize() for halaqa in teaching_halaqaat]
+    for halaqa in serialized_data:
+        halaqa["is_enrolled"] = True
     return render(request,"maqari/my_classes.html",{
         'data' : serialized_data
     })
@@ -26,17 +30,22 @@ def show_my_classes(request):
 def render_available_classes(request):
     return render(request,"maqari/available_classes.html")
 
+halaqaat_to_be_displayed_on_one_page = 15
+
+def get_page_count(request):
+    halaqaat = Paginator(Halaqa.objects.all().order_by("halaqa_number").all(),halaqaat_to_be_displayed_on_one_page)
+    page_count = halaqaat.num_pages
+    return JsonResponse({"page_count": page_count})
+
 def show_available_classes(request,page_no):
     user = request.user
-    if user.is_authenticated:
-        halaqaat = Paginator(Halaqa.objects.filter(gender = user.gender).order_by("halaqa_number").all(),15)
-    else:
-        halaqaat = Paginator(Halaqa.objects.all().order_by("halaqa_number").all(),10)
+    halaqaat = Paginator(Halaqa.objects.all().order_by("halaqa_number").all(),halaqaat_to_be_displayed_on_one_page)
 
     page = halaqaat.page(page_no).object_list
 
     serialized_data = [halaqa.serialize() for halaqa in page]
     for halaqa in serialized_data:
+
         if user.is_authenticated:
             if is_enrolled(user,halaqa['halaqa_id']):
                 halaqa["is_enrolled"] = True
@@ -44,9 +53,7 @@ def show_available_classes(request,page_no):
                 halaqa["is_enrolled"] = False
         else:
             halaqa["is_enrolled"] = False
-    #return render(request,"maqari/available_classes.html", {
-        #'data':serialized_data
-    #})
+    
     return JsonResponse(serialized_data,safe=False)
 
 def is_enrolled(user, halaqa_id):
