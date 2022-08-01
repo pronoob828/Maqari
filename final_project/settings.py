@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
    #     'NAME': BASE_DIR / 'db.sqlite3',
     #}
 #}
-Database_no = 2;
+Database_no = 1;
 
 if Database_no == 1:
     DATABASES = {
