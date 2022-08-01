@@ -55,7 +55,9 @@ class HalaqaAdmin(admin.ModelAdmin):
     readonly_fields = ()
 
     filter_horizontal = ('students',)
-    list_filter = ('gender','halaqa_type',SupervisorFilter,TeacherFilter)
+    list_filter = ('gender','halaqa_type',
+    #SupervisorFilter,TeacherFilter
+     )
 
     def image_preview(self,obj):
         return format_html(f"<img src = {obj.halaqa_image_url} width='35px'>")
