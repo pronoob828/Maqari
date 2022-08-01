@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+
+<div class="container text-center">
+    <form class="form-signin px-5" action='{% url "login" %}' method="post">
+        {% csrf_token %}
+
+        <h2 class="h2 m-3">Login</h2>
+        <input class="form-control m-2" autofocus maxlength="60" required type="email" name="email" placeholder="Email">
+        <input class="form-control m-2" required type="password" name="password" placeholder="Password">
+        <p><small><a href="{% url 'password_reset' %}">Forgot password?</a></small></p>
+
+        <button type="submit" class="btn btn-primary my-2">Log In</button>
+
+        {% if login_form.non_field_errors%}
+        <div class="text-danger">
+            <p>{{login_form.non_field_errors}}</p>
+        </div>
+        {% endif %}
+
+        <h6>
+            Don't have an account? <a href="{% url 'register' %}">Register</a>
+        </h6>
+        
+    </form>
+
+    
+</div>
+
+{% endblock %}
