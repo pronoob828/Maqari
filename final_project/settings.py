@@ -180,7 +180,7 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://192.168.1.6:9000/'
+EMAIL_PAGE_DOMAIN = 'http://maqari-test-publish.herokuapp.com/'
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
 # For Django Email Backend
