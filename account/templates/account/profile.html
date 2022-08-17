@@ -104,10 +104,13 @@ Profile : {{requested_user.username}}
         <small class="text-muted">
             {% if stat.role == "teacher" %}
             You Teach this Halaqa<br>
+            {% endif %}
             {% if stat.role == "supervisor" %}
             You Supervise this Halaqa<br>
+            {% endif %}
             {% if stat.role == "student" %}
             Your stats<br>
+            {% endif %}
             {% if stat.role == "superuser" %}
             Viewing as superuser<br>
             {% endif %}
