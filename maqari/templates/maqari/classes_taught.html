@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Classes You Teach
+{% endblock %}
+
+{% block head %}
+<script src="{% static 'maqari/clickable_halaqa.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <h1 class="text-center">
+        Classes You Teach
+    </h1>
+
+    <div class="m-3">
+        <div class="row row-cols-1 row-cols-md-3 g-2">
+            {% for halaqa in halaqaat %}
+            <div class="col">
+                <div class="card text-center">
+                    <div id="{{halaqa.halaqa_id}}" class="card-body halaqa_link">
+                        <img src="{{halaqa.halaqa_image_url}}" class="card-img-top styled_card_image"
+                            alt="halaqa image">
+                        <h5 class="card-title halaqa_type">
+                            {{halaqa.halaqa_number}} - {{halaqa.halaqa_type.type_name}}
+                            <button class="btn p-0" type="button" data-container="body" data-bs-toggle="popover"
+                                data-bs-trigger="hover" data-placement="bottom" title="{{halaqa.halaqa_type.type_name}}"
+                                data-bs-content="{{halaqa.halaqa_type.type_desc}}">
+                                <i class="fa-solid fa-circle-info mx-2"></i>
+                            </button>
+                        </h5>
+
+                        <p class="card-text">Teacher -
+                            <a href="accounts/profile/{{halaqa.teacher_id}}" data-bs-html="true" data-container="body"
+                                data-bs-toggle="popover" data-bs-trigger="hover" data-placement="bottom"
+                                title="{{halaqa.teacher_name}}" data-bs-content='
+                                    <img src="{{halaqa.teacher_profile}}" alt="Profile_image" class="img-thumbnail rounded-circle"><hr>
+                                    {{halaqa.teacher_years_of_experience}} years of experience<br>
+                                    Current Residence - {{halaqa.teacher_current_residence}}<br>
+                                    Nationality - {{halaqa.teacher_nationality}}<br>
+                                    <small class="text-muted">Click for more info</small>
+                                '>{{halaqa.teacher_name}}</a>.
+                        </p>
+                        <p class="card-text">Gender - {{halaqa.gender}}.</p>
+
+                        <p><small>Timings - {{halaqa.timings}}<br>Students - {{halaqa.student_count}}</small></p>
+
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success disabled">You Teach This Class</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block endscript%}
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
+{% endblock %}

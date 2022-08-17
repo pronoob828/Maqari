@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import BooleanField, CharField, DateTimeField
 from account.models import Account
+import random
 
 # Create your models here.
 
@@ -33,6 +34,9 @@ class Halaqa(models.Model):
     halaqa_type = models.ForeignKey(HalaqaType,null=True,on_delete=models.SET_NULL,related_name="halaqaat_of_type")
     halaqa_image_url = models.URLField(default='https://live.staticflickr.com/2139/2435364735_dc51a11e83.jpg')
 
+    def __str__(self):
+        return str(self.halaqa_number)
+
     def serialize(self):
         if self.halaqa_type:
             type = self.halaqa_type.serialize()
@@ -60,6 +64,16 @@ class Halaqa(models.Model):
             'student_count':self.students.count()
         }
 
+class HourlyEnrollment(models.Model):
+    enrollment_number = models.PositiveIntegerField(unique=True,default=random.randint(1,1000000))
+    student = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, related_name="student_hourly_enrollments")
+    total_hours = models.PositiveIntegerField()
+    hours_left = models.PositiveIntegerField()
+    enrollment_type = models.ForeignKey(HalaqaType,null=True,on_delete=models.SET_NULL,related_name="enrollments_of_type")
+
+    def __str__(self):
+        return str(str(self.enrollment_number) + ' - ' + str(self.student))
+
 class ExamType(models.Model):
     type_name = models.CharField(max_length=100)
     type_desc = models.TextField(max_length=500)
@@ -83,10 +97,11 @@ class Exam(models.Model):
     ]
 
     student = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, related_name="student_exams")
+    halaqa = models.ForeignKey(Halaqa,null=True,on_delete=models.SET_NULL,related_name="halaqa_exams")
     exam_type = models.ForeignKey(ExamType, null=True, on_delete=models.SET_NULL, related_name="exams_of_type")
     exam_halaqah_type = models.ForeignKey(HalaqaType,null=True,on_delete=models.SET_NULL,related_name="exams_of_halaqa_type")
-    exam_date = models.DateField()
-    exam_year = models.IntegerField(null = True)
+    exam_date = models.DateField(null=True,blank=True)
+    exam_year = models.IntegerField(null = True,blank=True)
     exam_timing = models.TextField(max_length=100)
     is_completed = models.BooleanField(default=False)
 
@@ -103,3 +118,39 @@ class Exam(models.Model):
 
     def __str__(self):
         return f"{self.student.username} {self.student.last_name} - {self.exam_type.type_name} - {self.number_of_juz} juz - {self.exam_date}"
+
+    class Meta:
+        unique_together = ('student','exam_type','exam_halaqah_type')
+
+class Stats(models.Model):
+
+    taqdeer = [
+        ("Excellent","Excellent"),
+        ("Very Good","Very Good"),
+        ("Good","Good"),
+        ("Not Acceptable","Not Acceptable"),
+        ("Not Recited","Not Recited"),
+    ]
+
+    attendance_choices = [
+        ("Present","Present"),
+        ("Absent","Absent"),
+        ("Late","Late"),
+    ]
+
+    account = models.ForeignKey(Account,null=True,on_delete=models.SET_NULL,related_name="account_stats")
+    halaqa = models.ForeignKey(Halaqa,null=True,on_delete=models.SET_NULL,related_name="halaqa_student_stats")
+    date = models.DateField()
+    attendance = models.CharField(max_length=10,choices=attendance_choices,default="Absent")
+    dars = models.CharField(max_length=50,blank=True,default="none")
+    dars_pages = models.FloatField(blank=True,default=0)
+    taqdeer_dars = models.CharField(max_length=20, choices=taqdeer,default="Not Recited")
+    murajia = models.CharField(max_length=100,blank=True,default="none")
+    murajia_pages = models.IntegerField(blank=True,default=0)
+    taqdeer_murajia = models.CharField(max_length=20, choices=taqdeer,default="Not Recited")
+
+    class Meta:
+        unique_together = ('account','halaqa','date')
+
+    def __str__(self):
+        return str(str(self.date) + str(self.account))

@@ -7,11 +7,14 @@ Profile : {{requested_user.username}}
 
 
 {% block body %}
-<div class="container-fluid m   -3 text-center">
-        <img src="{{requested_user.profile_image}}" alt="Profile Image" class="rounded-circle border" width="200">
-    <h1 class="text-center"><i class="fa-solid fa-user"></i> {{requested_user.username}} {{requested_user.last_name}} </h1>
+
+<div class="container-fluid m-3 text-center">
+    <img src="{{requested_user.profile_image}}" alt="Profile Image" class="rounded-circle border" style="width: 20vw;">
+    <h1 class="text-center"><i class="fa-solid fa-user"></i> {{requested_user.username}} {{requested_user.last_name}}
+    </h1>
 </div>
-<div class="container">
+
+<div class="container-fluid table-responsive text-center mx-0">
     <table class="table table-condensed table-striped text-center m-0">
         <tr>
             <td>First Name</td>
@@ -34,7 +37,7 @@ Profile : {{requested_user.username}}
             <td>{{requested_user.gender}}</td>
         </tr>
         <tr>
-            <td>Role</td>
+            <td>Role(s)</td>
             <td>
                 {% for group_name in requested_user.groups %}
                 {{group_name}}<br>
@@ -55,7 +58,7 @@ Profile : {{requested_user.username}}
             <td>Nationality</td>
             <td>{{requested_user.nationality}}</td>
         </tr>
-        {% if "Teacher" in requested_user.groups %}
+        {% if "Teacher" in requested_user.groups or requested_user.is_teacher %}
         {% if requested_user.years_of_experience and requested_user.years_of_experience > 0 %}
         <tr>
             <td>Years of experience</td>
@@ -70,4 +73,115 @@ Profile : {{requested_user.username}}
     </table>
 
 </div>
+
+<hr>
+
+{% if user.is_supervisor or user.is_teacher or user.is_superuser or requested_user == user%}
+<div class="container-fluid m-2 text-center">
+    {% if student_stats %}
+    <span class="my-2">
+        <table class="table table-condensed table-striped text-center mx-0 px-0">
+            <thead class="bg-dark text-white">
+                <th>
+                    Quick links
+                </th>
+            </thead>
+            {% for stat in student_stats%}
+            <tr>
+                <td><a href="#halaqa_{{stat.halaqa.halaqa_number}}">halaqa {{stat.halaqa.halaqa_number}}</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>No Classes</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </span>
+    {% endif %}
+    {% for stat in student_stats %}
+    <div id="halaqa_{{stat.halaqa.halaqa_number}}" class="container-fluid border-rounded border text-center my-3">
+        <h2>Halaqa : {{stat.halaqa.halaqa_number}} - {{stat.halaqa.halaqa_type.type_name}} </h2>
+        <small class="text-muted">
+            {% if stat.role == "teacher" %}
+            You Teach this Halaqa
+            {% elif stat.role == "supervisor" %}
+            You Supervise this Halaqa
+            {% elif stat.role == "student" %}
+            Your stats
+            {% elif stat.role == "superuser" %}
+            Viewing as superuser
+            {% endif %}
+        </small>
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        {% if stat.role == "teacher" %}
+        <div class="container text-center my-2 ">
+            <form id="stat_form" action="{% url 'add_student_stats' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="account" value="{{requested_user.id}}">
+                <input type="hidden" name="halaqa" value="{{stat.halaqa.id}}">
+                <input type="date" name="date" required>
+                <select class="form-select m-2" required name="attendance">
+                    <option selected value="Absent">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Late">Late</option>
+                </select>
+                <input class="form-control m-2" type="text" name="dars" placeholder="Dars">
+                <input class="form-control m-2" type="number" step="0.1" name="dars_pages" placeholder="dars_pages">
+                <select class="form-select m-2" required name="taqdeer_dars">
+                    <option selected value="Not Recited">Not Recited</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Good">Good</option>
+                    <option value="Not Acceptable">Not Acceptable</option>
+                </select>
+                <input class="form-control m-2" type="text" name="murajia" placeholder="Murajia">
+                <input class="form-control m-2" type="number" step="1" name="murajia_pages" placeholder="Murajia Pages">
+                <select class="form-select m-2" required name="taqdeer_murajia">
+                    <option selected value="Not Recited">Not Recited</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Good">Good</option>
+                    <option value="Not Acceptable">Not Acceptable</option>
+                </select>
+                <div class="text-center my-3">
+                    <button type="submit" class="btn btn-primary my-2">Add Stat</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        <div class=" container-fluid table-responsive text-center px-0 mx-0">
+            <table class="table table-condensed table-striped text-center mx-0 px-0 small_font">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>Date</th>
+                        <th>Attendance</th>
+                        <th>Dars</th>
+                        <th>Dars Pages</th>
+                        <th>Dars Grade</th>
+                        <th>Murajia</th>
+                        <th>Murajia Pages</th>
+                        <th>Murajia Grade</th>
+                    </tr>
+                </thead>
+                {% for day in stat.stats %}
+                <tr>
+                    <td>{{day.date}}</td>
+                    <td>{{day.attendance}}</td>
+                    <td>{{day.dars}}</td>
+                    <td>{{day.dars_pages}}</td>
+                    <td>{{day.taqdeer_dars}}</td>
+                    <td>{{day.murajia}}</td>
+                    <td>{{day.murajia_pages}}</td>
+                    <td>{{day.taqdeer_murajia}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% endblock %}

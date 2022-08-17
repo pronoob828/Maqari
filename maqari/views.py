@@ -1,12 +1,14 @@
+from django.db import IntegrityError
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from maqari.models import Halaqa
+from maqari.models import Halaqa,Stats
 from account.models import Account
+from maqari.forms import StatForm
 
 
 # Create your views here.
@@ -14,15 +16,13 @@ from account.models import Account
 def index(request):
     return render(request,"maqari/index.html")
 
-def show_my_classes(request):
+def show_your_classes(request):
     user = request.user
     enrolled_halaqaat = Halaqa.objects.filter(students = user)
-    teaching_halaqaat = Halaqa.objects.filter(teacher = user)
     serialized_data = [halaqa.serialize() for halaqa in enrolled_halaqaat]
-    serialized_data += [halaqa.serialize() for halaqa in teaching_halaqaat]
     for halaqa in serialized_data:
         halaqa["is_enrolled"] = True
-    return render(request,"maqari/my_classes.html",{
+    return render(request,"maqari/your_classes.html",{
         'data' : serialized_data
     })
 
@@ -64,3 +64,70 @@ def is_enrolled(user, halaqa_id):
             return False
     except:
         return False
+
+def show_supervised_classes(request):
+    user = request.user
+    halaqaat = Halaqa.objects.filter(supervisor = user).order_by("halaqa_number")
+    serialized_data = [halaqa.serialize() for halaqa in halaqaat]
+    for halaqa in serialized_data:
+        if user in Halaqa.objects.get(halaqa_number = halaqa['halaqa_number']).students.all():
+            halaqa["is_enrolled"] = True
+    return render(request,"maqari/supervised_classes.html",{
+        'halaqaat' : serialized_data
+    })
+
+def show_taught_classes(request):
+    user = request.user
+    taught_halaqaat = Halaqa.objects.filter(teacher = user)
+    serialized_data = [halaqa.serialize() for halaqa in taught_halaqaat]
+    for halaqa in serialized_data:
+        halaqa["is_enrolled"] = True
+    return render(request,"maqari/classes_taught.html",{
+        'halaqaat' : serialized_data
+    })
+
+def show_halaqa(request,halaqa_id):
+    halaqa = Halaqa.objects.get(id = halaqa_id)
+    return render(request,"maqari/halaqa.html",{'halaqa':halaqa})
+
+def render_student_search(request):
+    return render(request,"maqari/student_search.html")
+
+def add_student_stats(request):
+    if not request.user.is_authenticated:
+        return HttpResponse("Need login",status = 403)
+    
+    if request.POST:
+        form = StatForm(request.POST)
+        if form.is_valid:
+            data = request.POST
+            account = Account.objects.get(id = data['account'])
+            halaqa = Halaqa.objects.get(id = data['halaqa'])
+            date = data['date']
+            attendance = data['attendance']
+            dars = data['dars']
+            dars_pages = data['dars_pages']
+            taqdeer_dars = data['taqdeer_dars']
+            murajia = data['murajia'] 
+            murajia_pages = data['murajia_pages']
+            taqdeer_murajia = data['taqdeer_murajia']
+
+            if request.user == halaqa.teacher:
+                if attendance == "Absent":
+                    dars = "none"
+                    dars_pages = 0
+                    taqdeer_dars = "Not Recited"
+                    murajia = "none"
+                    murajia_pages = 0
+                    taqdeer_murajia = "Not Recited"
+
+                try:
+                    new_stat = Stats(account = account,halaqa=halaqa,date=date,attendance=attendance,dars = dars,dars_pages=dars_pages,taqdeer_dars=taqdeer_dars,murajia=murajia,murajia_pages=murajia_pages,taqdeer_murajia=taqdeer_murajia)
+                    new_stat.save()
+                except IntegrityError:
+                    return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
+                return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
+            else:
+                return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
+
+

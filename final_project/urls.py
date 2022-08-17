@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 from account.views import (registration_view, logout_view, login_view, confirm)
-from maqari.views import (index, show_available_classes,show_my_classes,render_available_classes,get_page_count)
+from maqari.views import (index, show_available_classes,show_your_classes,render_available_classes,get_page_count,render_student_search,show_supervised_classes,show_taught_classes,show_halaqa,add_student_stats)
 from django_email_verification import urls as email_urls
 
 from django.contrib.auth import views as auth_views
@@ -30,7 +30,12 @@ urlpatterns = [
     path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
     path("available_classes",render_available_classes,name="render_available_classes"),
     path("get_page_count",get_page_count,name="get_page_count"),
-    path("my_classes",show_my_classes,name="show_my_classes"),
+    path("your_classes",show_your_classes,name="show_your_classes"),
+    path("student_search",render_student_search,name="render_student_search"),
+    path("supervised_classes",show_supervised_classes,name="show_supervised_classes"),
+    path("taught_classes",show_taught_classes,name="show_taught_classes"),
+    path("halaqaat/<int:halaqa_id>",show_halaqa,name="show_halaqa"),
+    path("add_student_stats", add_student_stats, name="add_student_stats"),
     
 
     path("register/",registration_view,name="register"),

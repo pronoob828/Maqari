@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Halaqa {{halaqa.halaqa_number}}
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container-fluid m-3 text-center">
+    <img src="{{halaqa.halaqa_image_url}}" alt="Halaqa Image" class="rounded border mb-2" style="width: 20vw;">
+    <h1 class="text-center"><i class="fa-solid fa-book-open-cover"></i> {{halaqa.halaqa_number}} -
+        {{halaqa.halaqa_type.type_name}}</h1>
+    <h4>Description</h4>
+    <p>
+        {{halaqa.halaqa_type.type_desc}}<br>
+        Taught by {{halaqa.teacher.username}} {{halaqa.teacher.last_name}} under the supervision of
+        {{halaqa.supervisor.username}} {{halaqa.supervisor.last_name}}
+    </p>
+    <p>
+        Gender :- {{halaqa.gender}} <br>
+        timings :- {{halaqa.timings}} <br>
+        {{halaqa.students.count}} Students
+    </p>
+
+</div>
+
+<hr>
+
+<div class="container-fluid m-3 text-center">
+    <h3 class="m-3">Know The Teacher</h3>
+    <img src="{{halaqa.teacher.profile_image}}" alt="Teacher Image" class="rounded-circle border mb-3"
+        style="width: 20vw;">
+
+    <h4>{{halaqa.teacher.username}} {{halaqa.teacher.last_name}}</h4>
+
+    <p>
+        {% if halaqa.teacher.years_of_experience > 0 %}
+        {{halaqa.teacher.years_of_experience}} years of experience
+        {% endif %}
+    </p>
+    <p>
+        Nationality : {{halaqa.teacher.nationality.name}}<br>
+        Current Residence : {{halaqa.teacher.current_residence.name}}
+    </p>
+
+    {% if halaqa.teacher.qualifications %}
+    <h5>Qualifications</h5>
+    <p>
+        {{halaqa.teacher.qualifications}}
+    </p>
+    {% endif %}
+</div>
+
+<hr>
+
+{% if user == halaqa.supervisor or user == halaqa.teacher %}
+<div class="container-fluid m-3 text-center">
+    <h1>Students</h1>
+    <div class=" container-fluid table-responsive">
+        <table class="table table-condensed table-striped text-center m-0 small_font">
+            <tr>
+                <th>Student Name</th>
+                <th>Student Email</th>
+                <th>Nationality</th>
+            </tr>
+            {% for student in halaqa.students.all %}
+            <tr>
+                <td>
+                    <a href="{% url 'show_profile' student.id %}">{{student.username}} {{student.last_name}}</a>
+                </td>
+                <td>{{student.email}}</td>
+                <td>{{student.nationality.name}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

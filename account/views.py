@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django_email_verification import send_email, verify_view, verify_token
 from yaml import serialize, serialize_all
+from maqari.models import Halaqa, Stats
 
 
 from account.forms import RegistrationForm, AccountAuthenticationForm
@@ -29,7 +30,8 @@ def registration_view(request):
             account.is_active = False
             send_email(account)
             return render(
-                request, "account/check_email_prompt.html", {"account": account}
+                request, "account/check_email_prompt.html", {
+                    "account": account}
             )
         else:
             context["registration_form"] = form
@@ -78,10 +80,10 @@ def resend_email(request):
         raw_password = request.POST.get('password')
         try:
             user = get_user_model().objects.get(email=email)
-            original_active_value  = user.is_active
+            original_active_value = user.is_active
             user.is_active = True
             user.save()
-            account = authenticate(email = email , password = raw_password)
+            account = authenticate(email=email, password=raw_password)
             account.is_active = original_active_value
             account.save()
         except:
@@ -90,13 +92,14 @@ def resend_email(request):
             if not account.is_active:
                 send_email(account)
                 return render(
-                    request, "account/check_email_prompt.html", {"account": account}
+                    request, "account/check_email_prompt.html", {
+                        "account": account}
                 )
             else:
                 return HttpResponse("Account already verified")
         else:
             return HttpResponse("Email or password incorrect", status=404)
-    
+
     return render(
         request,
         "account/confirm_template.html",
@@ -118,18 +121,35 @@ def confirm(request, token):
     )
 
 
-def show_profile(request,user_id):
+def show_profile(request, user_id):
     current_user = request.user
-    #try:
-    requested_user = get_user_model().objects.get(id = user_id)
+    requested_user = get_user_model().objects.get(id=user_id)
     if current_user.is_authenticated and current_user.is_active:
-        if current_user == requested_user or current_user.is_staff or ("Student" not in requested_user.groups.all() and requested_user.groups.all() != None):
-            return render(request, 'account/profile.html',{
-                "requested_user" : requested_user.serialize(),
-            })
+        elders = requested_user.get_elders()
+        if current_user == requested_user or current_user.is_staff or (current_user.id in elders) :
+            context = {}
+            context['requested_user'] = requested_user.serialize()
+            context['student_stats'] = []
+            for halaqa in requested_user.students_halaqa.all():
+                stats = requested_user.account_stats.filter(halaqa=halaqa).all().order_by('-date')[:60]
+                if current_user.is_superuser:
+                    context['student_stats'].append({"role" : "superuser",
+                                                 "stats": stats,
+                                                 "halaqa": halaqa})
+                elif current_user == requested_user:
+                    context['student_stats'].append({"role" : "student",
+                                                 "stats": stats,
+                                                 "halaqa": halaqa})
+                elif current_user == halaqa.teacher:
+                    context['student_stats'].append({"role": "teacher",
+                                                 "stats": stats,
+                                                 "halaqa": halaqa})
+                elif current_user == halaqa.supervisor:
+                    context['student_stats'].append({"role": "supervisor",
+                                                 "stats": stats,
+                                                 "halaqa": halaqa})
+            return render(request, 'account/profile.html', context)
         else:
-            return HttpResponse("You are not autherized to view this page",status=403)
+            return HttpResponse("You are not autherized to view this page", status=403)
     else:
         return redirect(reverse('login'))
-    #except:
-        #return HttpResponse("User Not Found", status = 404)

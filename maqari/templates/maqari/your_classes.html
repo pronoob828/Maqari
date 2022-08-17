@@ -2,16 +2,19 @@
 {% load static %}
 
 {% block title %}
-My Classes
+Your Classes
 {% endblock %}
 
+{% block head %}
+<script src="{% static 'maqari/clickable_halaqa.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 
 <div class="container-fluid">
 
     <h1 class="text-center">
-        My classes
+        Your Classes
     </h1>
 
     <div class="m-3">
@@ -19,7 +22,7 @@ My Classes
             {% for halaqa in data %}
             <div class="col">
                 <div class="card text-center">
-                    <div class="card-body">
+                    <div id="{{halaqa.halaqa_id}}" class="card-body halaqa_link">
                         <img src="{{halaqa.halaqa_image_url}}" class="card-img-top styled_card_image"
                             alt="halaqa image">
                         <h5 class="card-title halaqa_type">
@@ -31,24 +34,27 @@ My Classes
                             </button>
                         </h5>
 
-                        <p class="card-text">Teacher - 
-                            <a href="accounts/profile/{{halaqa.teacher_id}}" data-bs-html="true" data-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-placement="bottom" title="{{halaqa.teacher_name}}" data-bs-content='
+                        <p class="card-text">Teacher -
+                            <a href="accounts/profile/{{halaqa.teacher_id}}" data-bs-html="true" data-container="body"
+                                data-bs-toggle="popover" data-bs-trigger="hover" data-placement="bottom"
+                                title="{{halaqa.teacher_name}}" data-bs-content='
                                     <img src="{{halaqa.teacher_profile}}" alt="Profile_image" class="img-thumbnail rounded-circle"><hr>
                                     {{halaqa.teacher_years_of_experience}} years of experience<br>
                                     Current Residence - {{halaqa.teacher_current_residence}}<br>
                                     Nationality - {{halaqa.teacher_nationality}}<br>
                                     <small class="text-muted">Click for more info</small>
-                                '>{{halaqa.teacher_name}}</a>.</p>
+                                '>{{halaqa.teacher_name}}</a>.
+                        </p>
                         <p class="card-text">Gender - {{halaqa.gender}}.</p>
-                        
+
                         <p><small>Timings - {{halaqa.timings}}<br>Students - {{halaqa.student_count}}</small></p>
-                        <div class="card-footer">
-                            {% if halaqa.is_enrolled %}
-                            <button class="btn btn-success disabled">Already enrolled</button>
-                            {% else %}
-                            <button class="btn btn-primary">Enroll</button>
-                            {% endif %}
-                        </div>
+                    </div>
+                    <div class="card-footer">
+                        {% if halaqa.is_enrolled %}
+                        <button class="btn btn-success disabled">Already enrolled</button>
+                        {% else %}
+                        <button class="btn btn-primary">Enroll</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -61,11 +67,11 @@ My Classes
 {% endblock %}
 
 {% block endscript%}
-    <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-    </script>
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
 {% endblock %}
