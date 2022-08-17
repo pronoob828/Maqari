@@ -17,3 +17,13 @@
      max-height: 250px !important;
      object-fit: cover
  }
+
+ .small_font {
+    font-size: small;
+ }
+
+ @media (max-width: 800px) {
+    .small_font{
+        font-size: 8px;
+    }
+ }

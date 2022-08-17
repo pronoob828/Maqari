@@ -54,6 +54,9 @@ class Account(AbstractBaseUser,PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
+    is_examiner = models.BooleanField(default=False)
+    is_supervisor = models.BooleanField(default=False)
     
     years_of_experience = models.IntegerField(blank=True ,null = True)
     qualifications = models.TextField(max_length=500,blank=True ,null=True)
@@ -69,6 +72,30 @@ class Account(AbstractBaseUser,PermissionsMixin):
     
     class Meta:
         unique_together = ('username','last_name','email')
+
+    def get_elders(self):
+        elders = []
+        for halaqa in self.students_halaqa.all():
+            elders.append(halaqa.teacher.id)
+            elders.append(halaqa.supervisor.id)
+        return set(elders)
+
+    def get_subordinates(self):
+        subordinates = []
+        halaqaat = self.teacher_in_halaqaat.all() | self.supervised_halaqaat.all()
+        for halaqa in halaqaat:
+            for student in halaqa.students.all():
+                subordinates.append(student.id)
+        return subordinates
+
+    def get_halaqas_joined(self):
+        return self.students_halaqa.all()
+    
+    def get_halaqas_taught(self):
+        return self.teacher_in_halaqaat.all()
+    
+    def get_halaqa_supervised(self):
+        return self.supervised_halaqaat.all()
 
     def __str__(self):
         return f"{self.username} {self.last_name} {self.email}"
@@ -99,5 +126,3 @@ class Account(AbstractBaseUser,PermissionsMixin):
             'profile_image' : self.profile_image,
             'groups' : [group.name for group in self.groups.all()]
         }
-
-

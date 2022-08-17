@@ -47,6 +47,14 @@
                     <li class="nav-item">
                         <a class="nav-link english" href="{% url 'render_available_classes' %}">Available Classes</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link english" href="/admin">Admin Page</a>
+                    </li>
+                    {% if user.is_supervisor %}
+                    <li class="nav-item">
+                        <a class="nav-link english" href="{% url 'render_student_search' %}">Search Student</a>
+                    </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -58,8 +66,18 @@
                                 <li ><a class="dropdown-item english" href="{% url 'show_profile' user.id %}">Profile</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item english" href="{% url 'show_my_classes' %}">My Classes</a>
+                                    <a class="dropdown-item english" href="{% url 'show_your_classes' %}">Classes You Take</a>
                                 </li>
+                                {% if user.is_teacher %}
+                                <li>
+                                    <a class="dropdown-item english" href="{% url 'show_taught_classes' %}">Classes You Teach</a>
+                                </li>
+                                {% endif %}
+                                {% if user.is_supervisor %}
+                                <li>
+                                    <a class="dropdown-item english" href="{% url 'show_supervised_classes' %}"> Classes You Supervise</a>
+                                </li>
+                                {% endif %}
                                 <li>
                                     <hr>
                                 </li>

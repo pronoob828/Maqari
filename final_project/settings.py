@@ -14,6 +14,8 @@ from email.headerregistry import Address
 from getpass import getuser
 from pathlib import Path
 import os
+#import django_heroku
+#import dj_database_url
 
 from django.contrib.auth import get_user_model
 
@@ -30,7 +32,7 @@ SECRET_KEY = 'django-insecure-e$7x)h&(mmqyf_)zhw*#8@b+20&qrxk=cp_q1lmoiz$e*fuz8q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.1.2','.herokuapp.com']
 
 
 # Application definition
@@ -129,11 +131,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -153,7 +155,7 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://192.168.1.6:9000/'
+EMAIL_PAGE_DOMAIN = 'http://192.168.1.2:9000/'
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
 # For Django Email Backend
@@ -166,3 +168,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'abdulazizahk@gmail.com'
 EMAIL_HOST_PASSWORD = 'lrmhtbsnlrzsrnyv'  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
+
+#django_heroku.settings(locals())

@@ -29,7 +29,7 @@ function load_halaqaat(page_no) {
                 halaqa_card.classList = "col";
                 halaqa_card.innerHTML = `
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div id="${halaqa.halaqa_id}" class="card-body halaqa_link">
                             <img src="${halaqa.halaqa_image_url}" class="card-img-top styled_card_image"
                                 alt="halaqa image">
 
@@ -47,15 +47,17 @@ function load_halaqaat(page_no) {
 
                             <p class="card-text">Gender - ${halaqa.gender}.</p>
                             <p><small>Timings - ${halaqa.timings}<br>Students - ${halaqa.student_count}</small></p>
-                            <div class="card-footer">` + enroll_button + `
-                            </div>
+                            
                         </div>
+                        <div class="card-footer">` + enroll_button + `
+                            </div>
                     </div>
                     `
                 halaqaat_container.append(halaqa_card);
 
             });
         }).then(load_popper)
+        .then(load_halaqa_links)
 }
 
 function load_popper() {
@@ -73,10 +75,19 @@ async function get_pages_count() {
     return page_count
 }
 
+function load_halaqa_links(){
+    const clickable = document.querySelectorAll('.halaqa_link')
+    clickable.forEach(element => {
+        element.addEventListener('click', function () {
+            window.location.href = `halaqaat/${element.id}`
+        });
+    })
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     
-    load_halaqaat(current_page);
-    
+    load_halaqaat(current_page);    
+
     get_pages_count().then(pages_count => {
         document.querySelector("#prev_page").addEventListener("click", function () {
             if (current_page == 1) {
