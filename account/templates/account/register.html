@@ -34,21 +34,14 @@ Register
         <small class="text-center text-danger">We will send a verification link to this email.</small>
         <input class="form-control m-2" required maxlength="20" type="tel" name="phone_num" placeholder="Valid Phone Number">
 
-        <select class="form-select m-2" required name="current_residence">
+        <input list="countries" class="form-select m-2" name="current_residence" placeholder="Current Residence">
+        <input list="countries" class="form-select m-2" name="nationality" placeholder="Nationality">
+        <datalist id="countries" class="d-none">
         {% get_countries as countries %}
-            <option selected>Select Country of Residence</option>
         {% for country in countries %}
             <option value="{{ country.code }}">{{ country.name }}</option>
         {% endfor %}
-        </select>
-
-        <select class="form-select m-2" required name="nationality">
-        {% get_countries as countries %}
-            <option disabled selected>Select Nationality</option>
-        {% for country in countries %}
-            <option value="{{ country.code }}">{{ country.name }}</option>
-        {% endfor %}
-        </select>
+        </datalist>
 
         <h5>Gender:- </h5>
         <input class="mx-4" type="radio" name="gender" value="Male">Male
