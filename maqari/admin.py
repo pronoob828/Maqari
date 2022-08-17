@@ -118,7 +118,6 @@ class ExamAdmin(admin.ModelAdmin):
                 'student',
                 'halaqa',
                 ('exam_type','exam_halaqah_type'),
-                ('exam_date','exam_year'),
                 'exam_timing',
                 ('exam_from','exam_till','number_of_juz'),
             )
@@ -127,6 +126,7 @@ class ExamAdmin(admin.ModelAdmin):
             'classes':('collapse',),
             'fields':(
                 'is_completed',
+                ('exam_date','exam_year'),
                 ('examiner1','examiner2'),
                 ('total_marks_obtained','hifdh_marks_obtained','tajweed_marks_obtained'),                
                 'rating',
@@ -159,6 +159,7 @@ class ExamAdmin(admin.ModelAdmin):
         print(form.base_fields['halaqa'].queryset)
 
         if not (request.user.is_supervisor or request.user.is_superuser or request.user.is_examiner):
+            form.base_fields['exam_date'].disabled = True
             form.base_fields['examiner1'].disabled = True
             form.base_fields['examiner2'].disabled = True
             form.base_fields['rating'].disabled = True

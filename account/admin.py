@@ -50,7 +50,7 @@ class AccountAdmin(UserAdmin):
             {   'classes':('collapse',),
                 'fields':
                 (
-                    ('is_active','is_staff','is_admin','is_superuser',),
+                    ('is_active','is_staff','is_superuser',),
                     'groups',
                     'user_permissions'
                 )
@@ -202,7 +202,7 @@ class AccountAdmin(UserAdmin):
             form.base_fields['is_supervisor'].disabled=True
             form.base_fields['is_staff'].disabled = True
             form.base_fields['is_active'].disabled = True
-            form.base_fields['is_admin'].disabled = True
+            #form.base_fields['is_admin'].disabled = True
             form.base_fields['is_superuser'].disabled = True
             form.base_fields["user_permissions"].disabled = True
             form.base_fields["groups"].disabled = True

@@ -100,8 +100,8 @@ class Exam(models.Model):
     halaqa = models.ForeignKey(Halaqa,null=True,on_delete=models.SET_NULL,related_name="halaqa_exams")
     exam_type = models.ForeignKey(ExamType, null=True, on_delete=models.SET_NULL, related_name="exams_of_type")
     exam_halaqah_type = models.ForeignKey(HalaqaType,null=True,on_delete=models.SET_NULL,related_name="exams_of_halaqa_type")
-    exam_date = models.DateField()
-    exam_year = models.IntegerField(null = True)
+    exam_date = models.DateField(null=True,blank=True)
+    exam_year = models.IntegerField(null = True,blank=True)
     exam_timing = models.TextField(max_length=100)
     is_completed = models.BooleanField(default=False)
 
