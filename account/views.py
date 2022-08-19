@@ -126,7 +126,7 @@ def show_profile(request, user_id):
     requested_user = get_user_model().objects.get(id=user_id)
     if current_user.is_authenticated and current_user.is_active:
         elders = requested_user.get_elders()
-        if current_user == requested_user or current_user.is_staff or (current_user.id in elders) :
+        if current_user == requested_user or current_user.is_staff or (current_user.id in elders) or (requested_user.is_teacher or requested_user.is_supervisor):
             context = {}
             context['requested_user'] = requested_user.serialize()
             context['student_stats'] = []
