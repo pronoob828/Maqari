@@ -195,7 +195,7 @@ else:
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'abdulazizahk@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_heroku')  # os.environ['password_key'] suggested
+EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_herokue')  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
 
 if not debug:
