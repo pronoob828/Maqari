@@ -91,6 +91,18 @@ def show_halaqa(request,halaqa_id):
     return render(request,"maqari/halaqa.html",{'halaqa':halaqa})
 
 def render_student_search(request):
+    if request.POST:
+        context = {}
+        data = request.POST
+        query = data["query"]
+        subordinate_ids = request.user.get_subordinates()
+        dataset = Account.objects.filter(id__in = subordinate_ids)
+        results = []
+        results += (dataset.filter(username = query).all()|dataset.filter(last_name = query).all()|dataset.filter(phone_num = query).all())
+        results += (dataset.filter(email__icontains = query).all()|dataset.filter(username__icontains = query).all()|dataset.filter(last_name__icontains = query).all())
+        context['results'] = results
+        print(results)
+        return render(request,"maqari/student_search.html",context)    
     return render(request,"maqari/student_search.html")
 
 def add_student_stats(request):

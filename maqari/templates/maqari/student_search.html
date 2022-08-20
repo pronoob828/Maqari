@@ -6,5 +6,29 @@ Student Search
 {% endblock %}
 
 {% block body %}
-
+    <div class="container-fluid text-center p-5 m-3">
+        <h3>Student Search</h3>
+        <form class="form-group" action="{% url 'render_student_search' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control my-3" type="text" name="query" placeholder="Search Student">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    {% if results %}
+        <div class="container-fluid my-4 p-5">
+            {% for account in results %}
+            <a class="link-dark" href="{% url 'show_profile' account.id %}">
+                <div class="container-fluid border border-round my-3">
+                    <h3>{{account.username}} {{account.last_name}}</h3>
+                    <h4>{{account.email}}</h4>
+                    <p>
+                        {% for halaqa in account.students_halaqa.all %}
+                        <a class="link-dark" href="{% url 'show_halaqa' halaqa.id %}">{{halaqa.halaqa_number}},</a>
+                        {% endfor %}
+                    </p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
