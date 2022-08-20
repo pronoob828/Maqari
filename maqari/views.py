@@ -112,7 +112,7 @@ def add_student_stats(request):
             murajia_pages = data['murajia_pages']
             taqdeer_murajia = data['taqdeer_murajia']
 
-            if request.user == halaqa.teacher:
+            if request.user == halaqa.teacher or request.user.is_superuser:
                 if attendance == "Absent":
                     dars = "none"
                     dars_pages = 0
@@ -128,6 +128,6 @@ def add_student_stats(request):
                     return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
                 return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
             else:
-                return HttpResponseRedirect(reverse("show_profile",kwargs = {'user_id':account.id}))
+                return HttpResponse("Only teachers can add their student's stats")
 
 
