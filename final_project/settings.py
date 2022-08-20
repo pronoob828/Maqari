@@ -14,8 +14,14 @@ from email.headerregistry import Address
 from getpass import getuser
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
+
+# SECURITY WARNING: don't run with debug turned on in production!
+debug = (os.environ.get("DEBUG") == "True")
+DEBUG = debug
+if debug:
+    pass
+else:
+    import django_heroku
 
 from django.contrib.auth import get_user_model
 
@@ -28,9 +34,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-e$7x)h&(mmqyf_)zhw*#8@b+20&qrxk=cp_q1lmoiz$e*fuz8q'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6','.herokuapp.com']
 
@@ -180,18 +183,20 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://maqari-test-publish.herokuapp.com/'
+EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain')
+
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
 # For Django Email Backend
-if DEBUG:
+if debug:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'abdulazizahk@gmail.com'
-EMAIL_HOST_PASSWORD = 'lrmhtbsnlrzsrnyv'  # os.environ['password_key'] suggested
+EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_heroku')  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
 
-django_heroku.settings(locals())
+if not debug:
+    django_heroku.settings(locals())
