@@ -14,8 +14,14 @@ from email.headerregistry import Address
 from getpass import getuser
 from pathlib import Path
 import os
-#import django_heroku
-#import dj_database_url
+
+# SECURITY WARNING: don't run with debug turned on in production!
+debug = (os.environ.get("DEBUG") == "True")
+DEBUG = debug
+if debug:
+    pass
+else:
+    import django_heroku
 
 from django.contrib.auth import get_user_model
 
@@ -29,10 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-e$7x)h&(mmqyf_)zhw*#8@b+20&qrxk=cp_q1lmoiz$e*fuz8q'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['127.0.0.1','192.168.1.2','192.168.1.7','.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6','.herokuapp.com']
 
 
 # Application definition
@@ -89,12 +92,36 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.sqlite3',
+   #     'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+#}
+Database_no = 1;
+
+if Database_no == 1:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+
+if Database_no == 2:
+    DATABASES = {  
+        'default': {  
+            'ENGINE': 'django.db.backends.mysql',  
+            'NAME': 'project4',  
+            'USER': os.environ.get("MYSQL_USER_PROJECT4"),  
+            'PASSWORD': os.environ.get("MYSQL_PASS"),  
+            'HOST': '127.0.0.1',  
+            'PORT': '3306',  
+            'OPTIONS': {  
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+            }  
+        }  
+    } 
 
 
 # Password validation
@@ -133,6 +160,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -155,18 +183,20 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://192.168.1.2:9000/'
+EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain')
+
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
 # For Django Email Backend
-if DEBUG:
+if debug:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'abdulazizahk@gmail.com'
-EMAIL_HOST_PASSWORD = 'lrmhtbsnlrzsrnyv'  # os.environ['password_key'] suggested
+EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_herokue')  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
 
-#django_heroku.settings(locals())
+if not debug:
+    django_heroku.settings(locals())
