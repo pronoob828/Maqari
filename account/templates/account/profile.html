@@ -115,7 +115,7 @@ Profile : {{requested_user.username}}
         {% if message %}
         <div>{{ message }}</div>
         {% endif %}
-        {% if stat.role == "teacher" %}
+        {% if stat.role == "teacher" or user.is_superuser %}
         <div class="container text-center my-2 ">
             <form id="stat_form" action="{% url 'add_student_stats' %}" method="post">
                 {% csrf_token %}
