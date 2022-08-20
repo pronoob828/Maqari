@@ -103,22 +103,22 @@ Profile : {{requested_user.username}}
         <h2>Halaqa : {{stat.halaqa.halaqa_number}} - {{stat.halaqa.halaqa_type.type_name}} </h2>
         <small class="text-muted">
             {% if stat.role == "teacher" %}
-            You Teach this Halaqa
+            You Teach this Halaqa<br>
             {% endif %}
             {% if stat.role == "supervisor" %}
-            You Supervise this Halaqa
+            You Supervise this Halaqa<br>
             {% endif %}
             {% if stat.role == "student" %}
-            Your stats
+            Your stats<br>
             {% endif %}
             {% if stat.role == "superuser" %}
-            Viewing as superuser
+            Viewing as superuser<br>
             {% endif %}
         </small>
         {% if message %}
         <div>{{ message }}</div>
         {% endif %}
-        {% if stat.role == "teacher" or stat.role == "supervisor"or user.is_superuser %}
+        {% if stat.role == "teacher" or stat.role == "superuser" %}
         <div class="container text-center my-2 ">
             <form id="stat_form" action="{% url 'add_student_stats' %}" method="post">
                 {% csrf_token %}
