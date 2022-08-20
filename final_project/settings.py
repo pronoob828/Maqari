@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-e$7x)h&(mmqyf_)zhw*#8@b+20&qrxk=cp_q1lmoiz$e*fuz8q'
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6','.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6','192.168.1.7','.herokuapp.com']
 
 
 # Application definition

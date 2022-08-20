@@ -65,7 +65,7 @@ class Halaqa(models.Model):
         }
 
 class HourlyEnrollment(models.Model):
-    enrollment_number = models.PositiveIntegerField(unique=True,default=random.randint(1,100000))
+    enrollment_number = models.PositiveIntegerField(unique=True)
     student = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, related_name="student_hourly_enrollments")
     total_hours = models.PositiveIntegerField()
     hours_left = models.PositiveIntegerField()
