@@ -104,18 +104,21 @@ Profile : {{requested_user.username}}
         <small class="text-muted">
             {% if stat.role == "teacher" %}
             You Teach this Halaqa
-            {% elif stat.role == "supervisor" %}
+            {% endif %}
+            {% if stat.role == "supervisor" %}
             You Supervise this Halaqa
-            {% elif stat.role == "student" %}
+            {% endif %}
+            {% if stat.role == "student" %}
             Your stats
-            {% elif stat.role == "superuser" %}
+            {% endif %}
+            {% if stat.role == "superuser" %}
             Viewing as superuser
             {% endif %}
         </small>
         {% if message %}
         <div>{{ message }}</div>
         {% endif %}
-        {% if stat.role == "teacher" %}
+        {% if stat.role == "teacher" or stat.role == "supervisor"%}
         <div class="container text-center my-2 ">
             <form id="stat_form" action="{% url 'add_student_stats' %}" method="post">
                 {% csrf_token %}
