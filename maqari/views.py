@@ -118,10 +118,16 @@ def add_student_stats(request):
             date = data['date']
             attendance = data['attendance']
             dars = data['dars']
-            dars_pages = data['dars_pages']
+            try:
+                dars_pages = float(data['dars_pages'])
+            except:
+                dars_pages = 0
             taqdeer_dars = data['taqdeer_dars']
-            murajia = data['murajia'] 
-            murajia_pages = data['murajia_pages']
+            murajia = data['murajia']
+            try:
+                murajia_pages = int(data['murajia_pages'])
+            except:
+                murajia_pages = 0
             taqdeer_murajia = data['taqdeer_murajia']
 
             if request.user == halaqa.teacher or request.user.is_superuser:
