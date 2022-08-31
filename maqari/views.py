@@ -30,7 +30,7 @@ def show_your_classes(request):
 def render_available_classes(request):
     return render(request,"maqari/available_classes.html")
 
-halaqaat_to_be_displayed_on_one_page = 15
+halaqaat_to_be_displayed_on_one_page = 10
 
 def get_page_count(request):
     halaqaat = Paginator(Halaqa.objects.all().order_by("halaqa_number").all(),halaqaat_to_be_displayed_on_one_page)
@@ -59,7 +59,7 @@ def show_available_classes(request,page_no):
 def is_enrolled(user, halaqa_id):
     try:
         halaqa = Halaqa.objects.get(id = halaqa_id)
-        if user in halaqa.students.all():
+        if user in halaqa.students.all() or user==halaqa.teacher or user==halaqa.supervisor:
             return True
         else:
             return False
@@ -220,3 +220,11 @@ def cancel_exam(request):
         return redirect("show_exams")
     else:
         return HttpResponse("Invalid Access Method",status=403)
+
+def enroll_student(request,halaqa_id):
+    halaqa = Halaqa.objects.get(id = halaqa_id)
+    halaqa.students.add(request.user)
+    return redirect("show_halaqa",halaqa_id)
+    #except:
+     #   return HttpResponse("Something Went Wrong",status=500)
+    

@@ -46,10 +46,12 @@ function load_halaqaat(page_no) {
                             </p>
 
                             <p class="card-text">Gender - ${halaqa.gender}.</p>
-                            <p><small>Timings - ${halaqa.timings}<br>Students - ${halaqa.student_count}</small></p>
+                            <p><small>Timings - ${halaqa.timings}<br>Students - ${halaqa.student_count}<br>
+                            <small class="text-muted">Click card to view more</small>
+                            </small></p>
                             
                         </div>
-                        <div class="card-footer">` + enroll_button + `
+                        <div id="${halaqa.halaqa_id}" class="card-footer halaqa_link">` + enroll_button + `
                             </div>
                     </div>
                     `

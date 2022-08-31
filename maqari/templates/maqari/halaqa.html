@@ -24,6 +24,12 @@ Halaqa {{halaqa.halaqa_number}}
         {{halaqa.students.count}} Students
     </p>
 
+    {% if not user in halaqa.students.all %}
+    <a href="{% url 'enroll_student' halaqa.id %}"><button class="btn btn-success btn-lg my-4">Enroll</button></a>
+    {% else %}
+    <a href="#"><button class="btn btn-danger btn-lg my-4" disabled>Already Enrolled</button></a>
+    {% endif %}
+
 </div>
 
 <hr>
@@ -33,7 +39,7 @@ Halaqa {{halaqa.halaqa_number}}
     <img src="{{halaqa.teacher.profile_image}}" alt="Teacher Image" class="rounded-circle border mb-3"
         style="width: 20vw;">
 
-    <h4>{{halaqa.teacher.username}} {{halaqa.teacher.last_name}}</h4>
+    <a href="{% url 'show_profile' halaqa.teacher.id %}"><h4>{{halaqa.teacher.username}} {{halaqa.teacher.last_name}}</h4></a>
 
     <p>
         {% if halaqa.teacher.years_of_experience > 0 %}

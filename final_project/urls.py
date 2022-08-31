@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 from account.views import (registration_view, logout_view, login_view, confirm)
-from maqari.views import (index, show_available_classes,show_your_classes,render_available_classes,get_page_count,render_student_search,show_supervised_classes,show_taught_classes,show_halaqa,add_student_stats,show_exams,show_exam_details,cancel_exam)
+from maqari.views import (index, show_available_classes,show_your_classes,render_available_classes,get_page_count,render_student_search,show_supervised_classes,show_taught_classes,show_halaqa,add_student_stats,show_exams,show_exam_details,cancel_exam,enroll_student)
 from django_email_verification import urls as email_urls
 
 from django.contrib.auth import views as auth_views
@@ -39,6 +39,7 @@ urlpatterns = [
     path("show_exams",show_exams,name="show_exams"),
     path("show_exam_details/<int:exam_id>",show_exam_details,name="show_exam_details"),
     path("cancel_exam",cancel_exam,name="cancel_exam"),
+    path("enroll_student/<int:halaqa_id>",enroll_student,name="enroll_student"),
     
 
     path("register/",registration_view,name="register"),
