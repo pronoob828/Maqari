@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from maqari.models import Halaqa,Stats,Exam
+from maqari.models import ExamType, Halaqa,Stats,Exam,HalaqaType
 from account.models import Account
 from maqari.forms import StatForm
 
@@ -101,7 +101,6 @@ def render_student_search(request):
         results += (dataset.filter(username = query).all()|dataset.filter(last_name = query).all()|dataset.filter(phone_num = query).all())
         results += (dataset.filter(email__icontains = query).all()|dataset.filter(username__icontains = query).all()|dataset.filter(last_name__icontains = query).all())
         context['results'] = results
-        print(results)
         return render(request,"maqari/student_search.html",context)    
     return render(request,"maqari/student_search.html")
 
@@ -153,7 +152,35 @@ def show_exams(request):
     user_students = Account.objects.filter(id__in = user.get_subordinates())
     context = {}
     context['active_exams'] = Exam.objects.filter(student__in = user_students, is_completed = False)
-    context['user_students'] = user_students
+    if request.POST:
+        data = request.POST
+        print(data)
+        student = Account.objects.get(id = data['student'])
+        halaqa = Halaqa.objects.get(halaqa_number = data["halaqa"])
+        exam_type = ExamType.objects.get(type_name = data["exam_type"])
+        exam_timing = data["exam_timing"]
+        exam_from = data["exam_from"]
+        exam_till = data["exam_till"]
+        number_of_juz = data["number_of_juz"]
+        exam_halaqa_type = halaqa.halaqa_type
+
+
+        if student in halaqa.students.all():
+            new_exam = Exam(student=student,halaqa=halaqa,exam_type=exam_type,exam_timing=exam_timing,exam_from=exam_from,exam_till=exam_till,number_of_juz=number_of_juz,exam_halaqah_type=exam_halaqa_type)
+            new_exam.save()
+            return redirect("show_exams")
+        else:
+            return HttpResponse("Invalid data",status=403)
+
+        try:
+            pass
+        except:
+            HttpResponse("Something went wrong",status=500)
+
+    else:
+        context['students'] = Account.objects.filter(id__in = user.get_students())
+        context['halaqaat'] = Halaqa.objects.filter(teacher = user)
+        context['exam_type'] = ExamType.objects.filter(is_open = True)
     return render(request, "maqari/exams.html",context)
 
 def show_exam_details(request,exam_id):
@@ -181,6 +208,6 @@ def cancel_exam(request):
             exam.delete()
         else:
             return HttpResponse("Permission Denied",status=403)
-        return redirect("index")
+        return redirect("show_exams")
     else:
         return HttpResponse("Invalid Access Method",status=403)

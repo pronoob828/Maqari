@@ -39,7 +39,11 @@ Register
         <datalist id="countries" class="d-none">
         {% get_countries as countries %}
         {% for country in countries %}
+            {% if country.code == "IL" %}        
+            <option value="{{ country.code }}">Occupied Palestine</option>
+            {% else %}
             <option value="{{ country.code }}">{{ country.name }}</option>
+            {% endif %}
         {% endfor %}
         </datalist>
 

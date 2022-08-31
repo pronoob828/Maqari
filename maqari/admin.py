@@ -159,8 +159,6 @@ class ExamAdmin(admin.ModelAdmin):
         form.base_fields['student'].queryset = Account.objects.filter(id__in = user_subordinates)
         form.base_fields['halaqa'].queryset = Halaqa.objects.filter(teacher = current_user) | Halaqa.objects.filter(supervisor = current_user)
 
-        print(form.base_fields['halaqa'].queryset)
-
         if not (request.user.is_supervisor or request.user.is_superuser or request.user.is_examiner):
             form.base_fields['exam_date'].disabled = True
             form.base_fields['examiner1'].disabled = True
