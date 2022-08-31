@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from maqari.models import Halaqa,Stats
+from maqari.models import Halaqa,Stats,Exam
 from account.models import Account
 from maqari.forms import StatForm
 
@@ -148,4 +148,39 @@ def add_student_stats(request):
             else:
                 return HttpResponse("Only teachers can add their student's stats")
 
+def show_exams(request):
+    user = request.user
+    user_students = Account.objects.filter(id__in = user.get_subordinates())
+    context = {}
+    context['active_exams'] = Exam.objects.filter(student__in = user_students, is_completed = False)
+    context['user_students'] = user_students
+    return render(request, "maqari/exams.html",context)
 
+def show_exam_details(request,exam_id):
+    exam = Exam.objects.get(id = exam_id)
+    user = request.user
+    if not (user == exam.halaqa.teacher or user == exam.halaqa.supervisor or user == exam.student):
+        return HttpResponse("You are not authorized to view this page", status=403)
+
+    context = {}
+    context['exam'] = exam
+    context['pass_ratings'] = ['Excellent','Very Good','Good']
+    context['fail_ratings'] = ['Fail','Absent','Pending']
+    if request.user == exam.halaqa.teacher or request.user == exam.halaqa.supervisor:
+        context['teacher_view'] = True
+    else:
+        context['teacher_view'] = False 
+    return render(request,"maqari/exam_details.html",context)
+
+def cancel_exam(request):
+    if request.POST:
+        data = request.POST
+        exam_id = data["exam_id"]
+        exam = Exam.objects.get(id=exam_id)
+        if request.user == exam.halaqa.teacher or request.user == exam.halaqa.supervisor:
+            exam.delete()
+        else:
+            return HttpResponse("Permission Denied",status=403)
+        return redirect("index")
+    else:
+        return HttpResponse("Invalid Access Method",status=403)

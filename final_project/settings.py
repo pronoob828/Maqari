@@ -183,7 +183,7 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain')
+EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain q')
 
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
@@ -195,7 +195,7 @@ else:
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'abdulazizahk@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_herokue')  # os.environ['password_key'] suggested
+EMAIL_HOST_PASSWORD = os.environ.get('password_for_maqari_heroku')  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
 
 if not debug:

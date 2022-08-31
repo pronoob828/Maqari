@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Exams
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container-fluid text-center p-5 my-3">
+        <h1>Active Exams</h1>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Halaqa</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>Till</th>
+                    <th>No. of Juz</th>
+                </tr>
+            </thead>
+            {% for exam in active_exams %}
+                <tr>
+                    <td>{{exam.student.get_full_name}}</td>
+                    <td>{{exam.halaqa.halaqa_number}}</td>
+                    <td>{{exam.exam_type}}</td>
+                    <td>{{exam.exam_date}}</td>
+                    <td>{{exam.exam_from}}</td>
+                    <td>{{exam.exam_till}}</td>
+                    <td>{{exam.number_of_juz}}</td>
+                    <td><a class="link-dark" href="{% url 'show_exam_details' exam.id %}">Details</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

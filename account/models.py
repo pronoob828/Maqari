@@ -88,6 +88,14 @@ class Account(AbstractBaseUser,PermissionsMixin):
                 subordinates.append(student.id)
         return subordinates
 
+    def get_students(self):
+        students = []
+        halaqaat = self.teacher_in_halaqaat.all()
+        for halaqa in halaqaat:
+            for student in halaqa.students.all():
+                students.append(student.id)
+        return students
+
     def get_halaqas_joined(self):
         return self.students_halaqa.all()
     

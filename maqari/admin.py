@@ -102,6 +102,7 @@ class ExamTypeAdmin(admin.ModelAdmin):
 
 class ExamAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'student',
         'halaqa',
         'exam_type',
@@ -111,6 +112,8 @@ class ExamAdmin(admin.ModelAdmin):
         'examiner1',
         'examiner2',
     )
+
+    list_display_links = ('id','student',)
 
     fieldsets = (
         ("Teacher's Options",{

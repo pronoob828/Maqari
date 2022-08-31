@@ -10,7 +10,7 @@ class HalaqaType(models.Model):
     type_desc = models.TextField(max_length = 500)
 
     def __str__(self):
-        return self.type_name
+        return str(self.type_name)
 
     def serialize(self):
         return{
@@ -103,12 +103,12 @@ class Exam(models.Model):
     exam_date = models.DateField(null=True,blank=True)
     exam_year = models.IntegerField(null = True,blank=True)
     exam_timing = models.TextField(max_length=100)
-    is_completed = models.BooleanField(default=False)
 
     exam_from = models.CharField(max_length=50,null=True)
     exam_till = models.CharField(max_length=50,null=True)
     number_of_juz = models.FloatField(null=True)
 
+    is_completed = models.BooleanField(default=False)
     examiner1 = models.ForeignKey(Account, blank=True,null=True, on_delete=models.PROTECT,related_name="Examiner1_exams")
     examiner2 = models.ForeignKey(Account, blank=True,null=True, on_delete=models.PROTECT,related_name="Examiner2_exams")
     rating = models.CharField(choices=ratings,max_length=50,default="Pending")

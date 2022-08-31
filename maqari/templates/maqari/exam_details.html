@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Exam details
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid text-center p-5">
+    <h2>{{exam.student.get_full_name}}</h2>
+    <h3>{{exam.halaqa.halaqa_number}}</h3>
+    <h4>{{exam.number_of_juz}} Juz</h4>
+
+    {% if exam.is_completed and exam.rating in pass_ratings %}
+    <span class="text-success"> {{exam.rating}} </span>
+    {% elif exam.is_completed and exam.rating in fail_ratings %}
+    <span class="text-danger">{{exam.rating}}</span>
+    {% else %}
+    <span class="text-warning">{{exam.rating}}</span>
+    {% endif %}
+
+    <table class="table table-striped">
+        <tr>
+            <td>Exam Type</td>
+            <td>{{exam.exam_type}}</td>
+        </tr>
+        <tr>
+            <td>Halaqa Type</td>
+            <td>{{exam.exam_halaqah_type}}</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>{{exam.exam_date}}</td>
+        </tr>
+        <tr>
+            <td>Year</td>
+            <td>{{exam.exam_year}}</td>
+        </tr>
+        <tr>
+            <td>Timing</td>
+            <td>{{exam.exam_timing}}</td>
+        </tr>
+        <tr>
+            <td>From</td>
+            <td>{{exam.exam_from}}</td>
+        </tr>
+        <tr>
+            <td>Till</td>
+            <td>{{exam.exam_till}}</td>
+        </tr>
+        {% if exam.is_completed %}
+        <tr>
+            <td>Examiner 1</td>
+            <td>{{exam.examiner1}}</td>
+        </tr>
+        <tr>
+            <td>Examiner 2</td>
+            <td>{{exam.examiner2}}</td>
+        </tr>
+        <tr>
+            <td>Total Marks</td>
+            <td>{{exam.total_marks_obtained}} out of {{exam.exam_type.total_marks}}</td>
+        </tr>
+        <tr>
+            <td>Hifdh Marks</td>
+            <td>{{exam.hifdh_marks_obtained}} out of {{exam.exam_type.hifdh_marks}}</td>
+        </tr>
+        <tr>
+            <td>Tajweed Marks</td>
+            <td>{{exam.tajweed_marks_obtained}} out of {{exam.exam_type.tajweed_marks}}</td>
+        </tr>
+        {% endif %}
+    </table>
+
+    {% if not exam.is_completed and teacher_view %}
+    <form id="delete_form" action="{% url 'cancel_exam' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="exam_id" value="{{exam.id}}">
+        <button type="button" id="cancel_btn" class="btn btn-danger btn-lg">Cancel Exam</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block endscript %}
+
+{% csrf_token %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.querySelector('#cancel_btn')
+        const form = document.querySelector("#delete_form")
+        btn.addEventListener('click', function () {
+            if (confirm("Are you sure?") == true) {
+                btn.classList += " disabled"
+                form.submit()
+            }
+        })
+    })
+</script>
+
+{% endblock %}
