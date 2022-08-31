@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
+import uuid
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -31,6 +32,7 @@ class MyAccountManager(BaseUserManager):
         return user
 
 class Account(AbstractBaseUser,PermissionsMixin):
+    #id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
 
     Genders=[
         ("Male","Male"),

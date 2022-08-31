@@ -1,3 +1,4 @@
+import http
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -154,10 +155,18 @@ def show_exams(request):
     context['active_exams'] = Exam.objects.filter(student__in = user_students, is_completed = False)
     if request.POST:
         data = request.POST
-        print(data)
-        student = Account.objects.get(id = data['student'])
-        halaqa = Halaqa.objects.get(halaqa_number = data["halaqa"])
-        exam_type = ExamType.objects.get(type_name = data["exam_type"])
+        try:
+            student = Account.objects.get(id = data['student'])
+        except:
+            return HttpResponse("Invalid Student")
+        try:
+            halaqa = Halaqa.objects.get(halaqa_number = data["halaqa"])
+        except:
+            return HttpResponse("Invalid Halaqa")
+        try:
+            exam_type = ExamType.objects.get(type_name = data["exam_type"])
+        except:
+            return HttpResponse("Invalid Exam Type")
         exam_timing = data["exam_timing"]
         exam_from = data["exam_from"]
         exam_till = data["exam_till"]
@@ -166,18 +175,18 @@ def show_exams(request):
 
 
         if student in halaqa.students.all():
-            new_exam = Exam(student=student,halaqa=halaqa,exam_type=exam_type,exam_timing=exam_timing,exam_from=exam_from,exam_till=exam_till,number_of_juz=number_of_juz,exam_halaqah_type=exam_halaqa_type)
-            new_exam.save()
-            return redirect("show_exams")
+            try:
+                new_exam = Exam(student=student,halaqa=halaqa,exam_type=exam_type,exam_timing=exam_timing,exam_from=exam_from,exam_till=exam_till,number_of_juz=number_of_juz,exam_halaqah_type=exam_halaqa_type)
+                new_exam.save()
+                return redirect("show_exams")
+            except:
+                return HttpResponse("Something went wrong",status=500)
         else:
             return HttpResponse("Invalid data",status=403)
-
-        try:
-            pass
-        except:
-            HttpResponse("Something went wrong",status=500)
-
     else:
+
+        # GET request
+
         context['students'] = Account.objects.filter(id__in = user.get_students())
         context['halaqaat'] = Halaqa.objects.filter(teacher = user)
         context['exam_type'] = ExamType.objects.filter(is_open = True)
