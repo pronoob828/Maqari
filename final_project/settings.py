@@ -17,8 +17,7 @@ import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
 debug = (os.environ.get("DEBUG") == "True")
-DEBUG = True
-debug = False
+DEBUG = debug
 if debug:
     pass
 else:
@@ -184,7 +183,7 @@ EMAIL_MAIL_HTML = 'account/mail_body.html'
 EMAIL_MAIL_PLAIN = 'account/mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60 * 2
 EMAIL_PAGE_TEMPLATE = 'account/confirm_template.html'
-EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain q')
+EMAIL_PAGE_DOMAIN = os.environ.get('django_email_page_domain')
 
 #EMAIL_MULTI_USER = True  # optional (defaults to False)
 
