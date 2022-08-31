@@ -17,7 +17,8 @@ import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
 debug = (os.environ.get("DEBUG") == "True")
-DEBUG = debug
+DEBUG = True
+debug = False
 if debug:
     pass
 else:
