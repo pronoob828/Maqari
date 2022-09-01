@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+Hourly Enrollments
+{% endblock %}
+
+
+{% block body %}
+    {% if user.is_staff or user.is_supervisor or user.is_teacher %}
+    <div class="container-fluid p-5 text-center">
+        <h2>Search Hourly Enrollments</h2>
+        <small class="text-muted m-2">Search</small>
+        <form action="#" method="post">
+            <input type="text" name="query" class="form-control m-2 mt-4">
+            <button type="submit" class="btn btn-primary m-2">Search</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="container-fluid p-5 text-center">
+        <h2>Hourly Enrollments</h2>
+        <p>
+            *Description of hourly enrollments goes here*
+        </p>
+        <h3> Enroll </h3>
+        <form action="{% url 'enrollments_page' %}" method="post">
+            {% csrf_token %}
+            <input required list="types" name="type" class="form-select m-2" placeholder="Enrollment Type">
+            <input id="hours" required type="number" name="total_hours" step="1" class="form-select m-2" placeholder="Number of hours">
+            <button id="btn" type="submit" class="btn btn-success">Enroll</button>
+            <datalist id="types">
+                {% for type in types %}
+                <option value="{{type.type_name}}">{{type.type_name}}</option>
+                {% endfor %}
+            </datalist>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block endscript %}
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+        const hour_input = document.querySelector("#hours")
+        const btn = document.querySelector("#btn")
+        hour_input.addEventListener("keyup",function(){
+            btn.textContent = `Enroll for (${hour_input.value}) hours`
+        })
+    })
+</script>
+{% endblock %}

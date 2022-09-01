@@ -15,10 +15,10 @@ Exams
             <input required list="halaqaat" name="halaqa" class="form-select m-2" placeholder="Halaqa Number">
             <input required list="students" name="student" class="form-select m-2" placeholder="Student">
             <input required list="exam_types" name="exam_type" class="form-select m-2" placeholder="Exam Type">
-            <textarea type="text" max="90" name="exam_timing" class="form-control m-2" placeholder="Timing"></textarea>
-            <input type="text" max="49" name="exam_from" class="form-control m-2" placeholder="From">
-            <input type="text" max="49" name="exam_till" class="form-control m-2" placeholder="Till">
-            <input type="number" name="number_of_juz" step=".1" class="form-control m-2" placeholder="Number of Juz">
+            <textarea required type="text" max="90" name="exam_timing" class="form-control m-2" placeholder="Timing"></textarea>
+            <input required type="text" max="49" name="exam_from" class="form-control m-2" placeholder="From">
+            <input required type="text" max="49" name="exam_till" class="form-control m-2" placeholder="Till">
+            <input required type="number" name="number_of_juz" step=".1" class="form-control m-2" placeholder="Number of Juz">
 
             <button type="submit" class="btn btn-primary btn-lg my-3">Add Exam</button>
             
@@ -29,7 +29,7 @@ Exams
             </datalist>
             <datalist id="students" class="d-none">
                 {% for student in students %}
-                <option value="{{student.id}}">{{student.username}} {{student.last_name}} {{student.email}}</option>
+                <option value="{{student.email}}">{{student.username}} {{student.last_name}} {{student.email}}</option>
                 {% endfor %}
             </datalist>
             <datalist id="exam_types" class="d-none">

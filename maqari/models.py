@@ -1,8 +1,7 @@
 from django.db import models
 from django.forms import BooleanField, CharField, DateTimeField
 from account.models import Account
-import random
-
+import uuid
 # Create your models here.
 
 class HalaqaType(models.Model):
@@ -65,7 +64,7 @@ class Halaqa(models.Model):
         }
 
 class HourlyEnrollment(models.Model):
-    enrollment_number = models.PositiveIntegerField(unique=True)
+    enrollment_number = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     student = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, related_name="student_hourly_enrollments")
     total_hours = models.PositiveIntegerField()
     hours_left = models.PositiveIntegerField()
@@ -79,8 +78,8 @@ class ExamType(models.Model):
     type_desc = models.TextField(max_length=500)
     is_open = models.BooleanField(default=False)
     total_marks = models.IntegerField()
-    hifdh_marks = models.IntegerField(blank=True)
-    tajweed_marks = models.IntegerField(blank=True)    
+    hifdh_marks = models.IntegerField(blank=True , null=True)
+    tajweed_marks = models.IntegerField(blank=True , null=True)    
 
     def __str__(self):
         return self.type_name

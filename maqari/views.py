@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from maqari.models import ExamType, Halaqa,Stats,Exam,HalaqaType
+from maqari.models import ExamType, Halaqa, HourlyEnrollment,Stats,Exam,HalaqaType
 from account.models import Account
 from maqari.forms import StatForm
 
@@ -156,7 +156,7 @@ def show_exams(request):
     if request.POST:
         data = request.POST
         try:
-            student = Account.objects.get(id = data['student'])
+            student = Account.objects.get(email = data['student'])
         except:
             return HttpResponse("Invalid Student")
         try:
@@ -228,3 +228,29 @@ def enroll_student(request,halaqa_id):
     #except:
      #   return HttpResponse("Something Went Wrong",status=500)
     
+def show_hourly_enrollment(request,enrollment_number):
+    enrollment = HourlyEnrollment.objects.get(enrollment_number = enrollment_number)
+    student = enrollment.student
+    context = {}
+    if request.user.is_authenticated and (request.user.is_teacher or request.user.is_superuser or request.user.is_supervisor or request.user == student):
+         context['enrollment'] = enrollment
+         return render(request,'maqari/enrollment.html',context)
+    else:
+        return HttpResponse("Permission Denied",status = 403)
+
+def enrollments_page(request):
+    context = {}
+    if request.POST:
+        if not request.user.is_authenticated:
+            return redirect(reverse("login"))
+
+        data = request.POST
+        student = request.user
+        total_hours = data['total_hours']
+        enrollment_type = HalaqaType.objects.get(type_name = data['type'])
+        new_enrollment = HourlyEnrollment(student=student,total_hours=total_hours,enrollment_type=enrollment_type,hours_left=total_hours)
+        new_enrollment.save()
+        return redirect(reverse('show_profile',kwargs={'user_id':request.user.id}))
+    
+    context['types'] = HalaqaType.objects.all()
+    return render(request,"maqari/enrollments_page.html",context)

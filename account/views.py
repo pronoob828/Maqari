@@ -130,6 +130,9 @@ def show_profile(request, user_id):
             context = {}
             context['requested_user'] = requested_user.serialize()
             context['student_stats'] = []
+            context['student_halaqas'] = requested_user.students_halaqa.all()
+            context['student_enrollments'] = requested_user.student_hourly_enrollments.all()
+            print(context['student_enrollments'])
             for halaqa in requested_user.students_halaqa.all():
                 stats = requested_user.account_stats.filter(halaqa=halaqa).all().order_by('-date')[:60]
                 if current_user.is_superuser:

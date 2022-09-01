@@ -41,19 +41,21 @@
                 </ul>
                 <span class="nav-item d-flex mx-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link english" href="{% url 'index' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link english" href="{% url 'render_available_classes' %}">Available Classes</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link english" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link english" href="{% url 'render_available_classes' %}">Available Classes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link english" href="{% url 'enrollments_page' %}">Hourly Enrollments</a>
+                        </li>                        
                     {% if user.is_supervisor %}
                     <li class="nav-item">
                         <a class="nav-link english" href="{% url 'render_student_search' %}">Search Student</a>
                     </li>
                     {% endif %}
                     {% if user.is_authenticated %}
-
                         {% if user.is_staff %}
                             <li class="nav-item">
                                 <a class="nav-link english" href="/admin">Admin Page</a>

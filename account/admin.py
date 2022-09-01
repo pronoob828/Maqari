@@ -114,20 +114,20 @@ class AccountAdmin(UserAdmin):
 
         for halaqa in halaqas:
             i = 0
-            halaqa_display_string += f"<a href='{halaqa_urls[i]}'>{halaqa.halaqa_number} , </a>"
+            halaqa_display_string += f"<a href='{halaqa_urls[i]}'>{halaqa.halaqa_number}</a>,<br>"
             i += 1
         
         for enrollment in enrollments:
             enrollment_urls.append(
-                reverse("admin:maqari_hourlyenrollment_change",args=(enrollment.id,))
+                reverse("admin:maqari_hourlyenrollment_change",args=(enrollment.enrollment_number,))
             )
 
         for enrollemnt in enrollments:
             i = 0
             if enrollment.hours_left == 0:
-                enrollment_display_string += f"<a href='{enrollment_urls[i]}' style='color:red'>{enrollment.enrollment_number} , </a>"
+                enrollment_display_string += f"<a href='{enrollment_urls[i]}' style='color:red'>{enrollment.enrollment_number}</a>,<br>"
             else:
-                enrollment_display_string += f"<a href='{enrollment_urls[i]}' style='color:green'>{enrollment.enrollment_number} , </a>"
+                enrollment_display_string += f"<a href='{enrollment_urls[i]}' style='color:green'>{enrollment.enrollment_number}</a>,<br>"
             i += 1
 
         display_string = "H - " + halaqa_display_string + "<br>E - " + enrollment_display_string
