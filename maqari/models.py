@@ -5,6 +5,7 @@ import uuid
 # Create your models here.
 
 class HalaqaType(models.Model):
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     type_name = models.CharField(max_length=100)
     type_desc = models.TextField(max_length = 500)
 
@@ -18,7 +19,7 @@ class HalaqaType(models.Model):
         }
 
 class Halaqa(models.Model):
-
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     Genders=[
         ("Male","Male"),
         ("Female","Female")
@@ -74,6 +75,7 @@ class HourlyEnrollment(models.Model):
         return str(str(self.enrollment_number) + ' - ' + str(self.student))
 
 class ExamType(models.Model):
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     type_name = models.CharField(max_length=100)
     type_desc = models.TextField(max_length=500)
     is_open = models.BooleanField(default=False)
@@ -85,7 +87,7 @@ class ExamType(models.Model):
         return self.type_name
     
 class Exam(models.Model):
-    
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     ratings=[
         ("Excellent","Excellent"),
         ("Very_Good","Very Good"),
@@ -122,7 +124,7 @@ class Exam(models.Model):
         unique_together = ('student','exam_type','exam_halaqah_type')
 
 class Stats(models.Model):
-
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
     taqdeer = [
         ("Excellent","Excellent"),
         ("Very Good","Very Good"),

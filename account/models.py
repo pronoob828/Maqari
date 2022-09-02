@@ -32,7 +32,7 @@ class MyAccountManager(BaseUserManager):
         return user
 
 class Account(AbstractBaseUser,PermissionsMixin):
-    #id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
+    id = models.UUIDField(primary_key = True,default=uuid.uuid4,editable=False)
 
     Genders=[
         ("Male","Male"),

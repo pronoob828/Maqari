@@ -41,7 +41,7 @@ urlpatterns = [
     path("cancel_exam",cancel_exam,name="cancel_exam"),
     path("enroll_student/<int:halaqa_id>",enroll_student,name="enroll_student"),
     path("show_hourly_enrollment/<uuid:enrollment_number>",show_hourly_enrollment,name="show_hourly_enrollment"),
-    path("enrollments_page",enrollments_page,name="enrollments_page"),    
+    path("enrollments_page",enrollments_page,name="enrollments_page"),
 
     path("register/",registration_view,name="register"),
     path("logout/",logout_view,name="logout"),
