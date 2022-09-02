@@ -230,7 +230,7 @@ class HourlyEnrollmentAdmin(admin.ModelAdmin):
         return form
 
 class LogEntryAdmin(admin.ModelAdmin):
-    readonly_fields = ('user',)
+    readonly_fields = ('user','content_type','object_id','object_repr','action_flag','change_message')
 
 admin.site.register(Halaqa,HalaqaAdmin)
 admin.site.register(HalaqaType)
@@ -238,4 +238,4 @@ admin.site.register(Exam,ExamAdmin)
 admin.site.register(ExamType,ExamTypeAdmin)
 admin.site.register(Stats,StatsAdmin)
 admin.site.register(HourlyEnrollment,HourlyEnrollmentAdmin)
-admin.site.register(LogEntry)
+admin.site.register(LogEntry,LogEntryAdmin)
