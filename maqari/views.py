@@ -264,7 +264,7 @@ def search_enrollment(request):
             if user.is_staff or user.is_superuser or user.is_teacher or user.is_supervisor:
                 data = request.POST
                 query = data['query']
-                dataset = HourlyEnrollment.objects.all()
+                dataset = HourlyEnrollment.objects.filter(hours_left__gt = 0)
                 results = []
                 try:
                     results += dataset.filter(enrollment_number = query)
