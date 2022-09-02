@@ -254,3 +254,29 @@ def enrollments_page(request):
     
     context['types'] = HalaqaType.objects.all()
     return render(request,"maqari/enrollments_page.html",context)
+
+def search_enrollment(request):
+    user = request.user
+    context = {}
+    context['types'] = HalaqaType.objects.all()
+    if request.POST:
+        if user.is_authenticated:
+            if user.is_staff or user.is_superuser or user.is_teacher or user.is_supervisor:
+                data = request.POST
+                query = data['query']
+                dataset = HourlyEnrollment.objects.all()
+                results = []
+                try:
+                    results += dataset.filter(enrollment_number = query)
+                except:
+                    pass
+                results += dataset.filter(student__username = query).all() | dataset.filter(student__last_name = query).all() | dataset.filter(student__email = query).all()
+                results += dataset.filter(enrollment_type__type_name__iexact = query).all() | dataset.filter(student__username__icontains = query).all() | dataset.filter(student__last_name__icontains=query).all() | dataset.filter(student__email__icontains = query).all()
+                context['results'] = results
+                return render(request,"maqari/enrollments_page.html",context)
+            else:
+                return HttpResponse("Permission Denied",status=403)
+        else:
+            return redirect(reverse("login"))
+    else:
+        return render(request,"maqari/enrollments_page.html",context)

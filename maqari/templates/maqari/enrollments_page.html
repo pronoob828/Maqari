@@ -7,15 +7,30 @@ Hourly Enrollments
 
 
 {% block body %}
-    {% if user.is_staff or user.is_supervisor or user.is_teacher %}
+    {% if user.is_staff or user.is_supervisor or user.is_teacher or user.is_superuser %}
     <div class="container-fluid p-5 text-center">
         <h2>Search Hourly Enrollments</h2>
         <small class="text-muted m-2">Search</small>
-        <form action="#" method="post">
+        <form action="{% url 'search_enrollment' %}" method="post">
+            {% csrf_token %}
             <input type="text" name="query" class="form-control m-2 mt-4">
             <button type="submit" class="btn btn-primary m-2">Search</button>
         </form>
     </div>
+    {% endif %}
+    {% if results %}
+        <div class="container-fluid my-4 p-5">
+            {% for enrollment in results %}
+            <a class="link-dark" href="{% url 'show_hourly_enrollment' enrollment.enrollment_number %}">
+                <div class="container-fluid border border-round my-3">
+                    <h4>{{enrollment.student.username}} {{enrollment.student.last_name}}</h4>
+                    <h4>{{enrollment.student.email}}</h4>
+                    <h6>{{enrollment.enrollment_type}}</h6>
+                    <h5>{{enrollment.hours_left}} / {{enrollment.total_hours}}</h5>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <div class="container-fluid p-5 text-center">
