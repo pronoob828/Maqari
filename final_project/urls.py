@@ -27,19 +27,19 @@ urlpatterns = [
     path("", index,name='index'),
     
     
-    path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
+    path("show_available_classes/<uuid:page_no>",show_available_classes,name="show_available_classes"),
     path("available_classes",render_available_classes,name="render_available_classes"),
     path("get_page_count",get_page_count,name="get_page_count"),
     path("your_classes",show_your_classes,name="show_your_classes"),
     path("student_search",render_student_search,name="render_student_search"),
     path("supervised_classes",show_supervised_classes,name="show_supervised_classes"),
     path("taught_classes",show_taught_classes,name="show_taught_classes"),
-    path("halaqaat/<int:halaqa_id>",show_halaqa,name="show_halaqa"),
+    path("halaqaat/<uuid:halaqa_id>",show_halaqa,name="show_halaqa"),
     path("add_student_stats", add_student_stats, name="add_student_stats"),
     path("show_exams",show_exams,name="show_exams"),
-    path("show_exam_details/<int:exam_id>",show_exam_details,name="show_exam_details"),
+    path("show_exam_details/<uuid:exam_id>",show_exam_details,name="show_exam_details"),
     path("cancel_exam",cancel_exam,name="cancel_exam"),
-    path("enroll_student/<int:halaqa_id>",enroll_student,name="enroll_student"),
+    path("enroll_student/<uuid:halaqa_id>",enroll_student,name="enroll_student"),
     path("show_hourly_enrollment/<uuid:enrollment_number>",show_hourly_enrollment,name="show_hourly_enrollment"),
     path("enrollments_page",enrollments_page,name="enrollments_page"),
 
