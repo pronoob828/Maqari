@@ -27,7 +27,7 @@ urlpatterns = [
     path("", index,name='index'),
     
     
-    path("show_available_classes/<uuid:page_no>",show_available_classes,name="show_available_classes"),
+    path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
     path("available_classes",render_available_classes,name="render_available_classes"),
     path("get_page_count",get_page_count,name="get_page_count"),
     path("your_classes",show_your_classes,name="show_your_classes"),
