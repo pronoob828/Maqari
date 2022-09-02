@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.html import format_html
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import LogEntry
 
 # Register your models here.
 
@@ -235,3 +236,4 @@ admin.site.register(Exam,ExamAdmin)
 admin.site.register(ExamType,ExamTypeAdmin)
 admin.site.register(Stats,StatsAdmin)
 admin.site.register(HourlyEnrollment,HourlyEnrollmentAdmin)
+admin.site.register(LogEntry)
