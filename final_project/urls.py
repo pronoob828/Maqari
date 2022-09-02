@@ -17,32 +17,32 @@ from django.contrib import admin
 from django.urls import path,include
 
 from account.views import (registration_view, logout_view, login_view, confirm)
-from maqari.views import (index, show_available_classes,show_your_classes,render_available_classes,get_page_count,render_student_search,show_supervised_classes,show_taught_classes,show_halaqa,add_student_stats,show_exams,show_exam_details,cancel_exam,enroll_student,show_hourly_enrollment,enrollments_page,search_enrollment)
+from maqari import views as mviews
 from django_email_verification import urls as email_urls
 
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", index,name='index'),
+    path("", mviews.index,name='index'),
     
     
-    path("show_available_classes/<int:page_no>",show_available_classes,name="show_available_classes"),
-    path("available_classes",render_available_classes,name="render_available_classes"),
-    path("get_page_count",get_page_count,name="get_page_count"),
-    path("your_classes",show_your_classes,name="show_your_classes"),
-    path("student_search",render_student_search,name="render_student_search"),
-    path("supervised_classes",show_supervised_classes,name="show_supervised_classes"),
-    path("taught_classes",show_taught_classes,name="show_taught_classes"),
-    path("halaqaat/<uuid:halaqa_id>",show_halaqa,name="show_halaqa"),
-    path("add_student_stats", add_student_stats, name="add_student_stats"),
-    path("show_exams",show_exams,name="show_exams"),
-    path("show_exam_details/<uuid:exam_id>",show_exam_details,name="show_exam_details"),
-    path("cancel_exam",cancel_exam,name="cancel_exam"),
-    path("enroll_student/<uuid:halaqa_id>",enroll_student,name="enroll_student"),
-    path("show_hourly_enrollment/<uuid:enrollment_number>",show_hourly_enrollment,name="show_hourly_enrollment"),
-    path("enrollments_page",enrollments_page,name="enrollments_page"),
-    path('search_enrollment',search_enrollment,name='search_enrollment'),
+    path("show_available_classes/<int:page_no>",mviews.show_available_classes,name="show_available_classes"),
+    path("available_classes",mviews.render_available_classes,name="render_available_classes"),
+    path("get_page_count",mviews.get_page_count,name="get_page_count"),
+    path("your_classes",mviews.show_your_classes,name="show_your_classes"),
+    path("student_search",mviews.render_student_search,name="render_student_search"),
+    path("supervised_classes",mviews.show_supervised_classes,name="show_supervised_classes"),
+    path("taught_classes",mviews.show_taught_classes,name="show_taught_classes"),
+    path("halaqaat/<uuid:halaqa_id>",mviews.show_halaqa,name="show_halaqa"),
+    path("add_student_stats", mviews.add_student_stats, name="add_student_stats"),
+    path("show_exams",mviews.show_exams,name="show_exams"),
+    path("show_exam_details/<uuid:exam_id>",mviews.show_exam_details,name="show_exam_details"),
+    path("cancel_exam",mviews.cancel_exam,name="cancel_exam"),
+    path("enroll_student/<uuid:halaqa_id>",mviews.enroll_student,name="enroll_student"),
+    path("show_hourly_enrollment/<uuid:enrollment_number>",mviews.show_hourly_enrollment,name="show_hourly_enrollment"),
+    path("enrollments_page",mviews.enrollments_page,name="enrollments_page"),
+    path('search_enrollment',mviews.search_enrollment,name='search_enrollment'),
 
     path("register/",registration_view,name="register"),
     path("logout/",logout_view,name="logout"),

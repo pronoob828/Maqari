@@ -225,8 +225,6 @@ def enroll_student(request,halaqa_id):
     halaqa = Halaqa.objects.get(id = halaqa_id)
     halaqa.students.add(request.user)
     return redirect("show_halaqa",halaqa_id)
-    #except:
-     #   return HttpResponse("Something Went Wrong",status=500)
     
 def show_hourly_enrollment(request,enrollment_number):
     enrollment = HourlyEnrollment.objects.get(enrollment_number = enrollment_number)
