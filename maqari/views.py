@@ -268,11 +268,17 @@ def search_enrollment(request):
                 results = []
                 try:
                     results += dataset.filter(enrollment_number = query)
+                    if results != []:
+                        context = {}
+                        context['enrollment'] = results[0]
+                        return render(request,'maqari/enrollment.html',context)
                 except:
                     pass
+                spaced = query.split(' ')
+                results += dataset.filter(student__username__in = spaced, student__last_name__in = spaced).all()
                 results += dataset.filter(student__username = query).all() | dataset.filter(student__last_name = query).all() | dataset.filter(student__email = query).all()
                 results += dataset.filter(enrollment_type__type_name__iexact = query).all() | dataset.filter(student__username__icontains = query).all() | dataset.filter(student__last_name__icontains=query).all() | dataset.filter(student__email__icontains = query).all()
-                context['results'] = results
+                context['results'] = set(results)
                 return render(request,"maqari/enrollments_page.html",context)
             else:
                 return HttpResponse("Permission Denied",status=403)
