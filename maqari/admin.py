@@ -229,6 +229,8 @@ class HourlyEnrollmentAdmin(admin.ModelAdmin):
 
         return form
 
+class LogEntryAdmin(admin.ModelAdmin):
+    readonly_fields = ('user',)
 
 admin.site.register(Halaqa,HalaqaAdmin)
 admin.site.register(HalaqaType)
