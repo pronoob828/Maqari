@@ -11,9 +11,14 @@ function load_halaqaat(page_no) {
             halaqaat.forEach(halaqa => {
 
                const teacher_desc = document.createElement('div');
+               if(halaqa.teacher_years_of_experience > 0){
+                var exp = `${halaqa.teacher_years_of_experience} years of experience <br>`
+               }else{
+                var exp = ``
+               }
                teacher_desc.innerHTML = `
                             <img src="${halaqa.teacher_profile}" alt="Profile_image" class="img-thumbnail rounded-circle"><hr>
-                        ${halaqa.teacher_years_of_experience} years of experience<br>
+                        ${exp}
                         Current Residence - ${halaqa.teacher_current_residence}<br>
                         Nationality - ${halaqa.teacher_nationality}<br>
                         <small class="text-muted">Click for more info</small>                
